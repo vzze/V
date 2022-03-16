@@ -29,15 +29,6 @@ std::string v::util::normalized_path(const char * path) {
     return std::filesystem::current_path().string() + path;
 }
 
-int v::util::width;
-int v::util::height;
-
-void v::util::framebuffer_size_callback(GLFWwindow * window, int width, int height) {
-    v::util::width = width;
-    v::util::height = height;
-    glViewport(0, 0, width, height);
-}
-
 std::tuple<short int, short int, short int> v::util::hex_to_rgb(long long hex) {
     return std::make_tuple((short int)((hex >> sizeof(hex) * 2) & 0xFF), (short int)(((hex >> sizeof(hex)) & 0xFF)), (short int)(hex & 0xFF));
 }

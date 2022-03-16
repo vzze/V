@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 #include <filesystem>
 #include <string>
@@ -11,9 +10,6 @@
 
 namespace v {
     namespace util {
-        extern int width;
-        extern int height;
-
         void log(const char * output);
 
         std::tuple<short int, short int, short int> hex_to_rgb(long long hex);
@@ -25,7 +21,5 @@ namespace v {
         std::string get_file(const char * file);
         // Format: \\Path\\to\\file
         std::string normalized_path(const char * path);
-
-        void framebuffer_size_callback(GLFWwindow * window, int width, int height);
     }
 }

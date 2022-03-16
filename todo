@@ -15,12 +15,7 @@ implement fx/gltf.h
     use as backend for Model class
     hope it doesnt break
 
-clean up main
-    engineInit function with all required params
-    define v::util::framebuffer_size_callback as opengl_callback
-    make it pointer
-    force user to define it and use EngineCallback() inside it
-    any extra funcs go into util
+clean up main - done
 
 glsl
     clean up vert and frag files
@@ -29,3 +24,10 @@ glsl
     get a degree in maths
     fix ugly fog solution
     anisotropic filtering so textures dont look garbo
+
+engine
+    add virtual functions for engine_callback, tickrate based function, and function call for every draw
+    extend capability of user creating more than one shaderprogram
+    let user use more than one shadingprogram
+    fix light constants
+    better solution for lighting

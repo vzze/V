@@ -1,9 +1,8 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
-#include "../shaders/shaderClass.h"
+#include "../shaders/Shader.h"
 
 namespace v {
     namespace renderer {

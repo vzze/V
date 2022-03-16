@@ -1,4 +1,6 @@
-#include "shaderClass.h"
+#include "Shader.h"
+
+#include <iostream>
 
 v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile) {
     std::string vertF = v::util::get_file(vertexFile);
@@ -6,7 +8,7 @@ v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile) 
 
     const char * vf = vertF.c_str();
     const char * ff = fragF.c_str();
-
+    try {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vf, NULL);
     glCompileShader(vertexShader);
@@ -29,7 +31,12 @@ v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile) 
     compileErr(ID, "PROGRAM");
 
     glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glDeleteShader(fragmentShader); 
+    }catch(const std::exception& e)
+    {
+        std::cout << "Error:\n";
+        std::cout << e.what() << '\n';
+    }
 }
 
 void v::renderer::Shader::Activate() {
@@ -41,6 +48,7 @@ void v::renderer::Shader::Delete() {
 }
 
 void v::renderer::Shader::compileErr(unsigned int shader, const char * type) {
+    
     GLint hasCompiled;
     char info[1024];
     if(type != "PROGRAM") {
@@ -65,5 +73,5 @@ void v::renderer::Shader::compileErr(unsigned int shader, const char * type) {
 
             v::util::log(log.c_str());
         }
-    }
+    } 
 }

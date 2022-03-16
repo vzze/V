@@ -11,7 +11,7 @@
 #include <gtx/rotate_vector.hpp>
 #include <gtx/vector_angle.hpp>
 
-#include "../shaders/shaderClass.h"
+#include "../shaders/Shader.h"
 
 namespace v {
     namespace renderer {
