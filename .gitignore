@@ -4,3 +4,4 @@ V/renderer/Resources
 .vscode
 .vim
 compile_commands.json
+.cache
