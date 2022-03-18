@@ -45,3 +45,6 @@ float v::util::normalized_color(short int color) {
 void v::util::log(const char * output) {
     static std::ofstream out("app.log"); out << output;
 }
+
+const std::string v::util::default_fragment_shader_path = v::util::normalized_path("\\V\\renderer\\shaders\\default.frag");
+const std::string v::util::default_vertex_shader_path = v::util::normalized_path("\\V\\renderer\\shaders\\default.vert"); 

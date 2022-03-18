@@ -2,3 +2,5 @@ main.exe
 app.log
 V/renderer/Resources
 .vscode
+.vim
+compile_commands.json

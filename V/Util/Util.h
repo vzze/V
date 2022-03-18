@@ -11,6 +11,9 @@
 namespace v {
     namespace util {
         void log(const char * output);
+        
+        extern const std::string default_vertex_shader_path;
+        extern const std::string default_fragment_shader_path;
 
         std::tuple<short int, short int, short int> hex_to_rgb(long long hex);
 
