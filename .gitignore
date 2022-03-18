@@ -5,3 +5,4 @@ V/renderer/Resources
 .vim
 compile_commands.json
 .cache
+build.bat
