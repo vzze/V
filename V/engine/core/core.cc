@@ -1,17 +1,21 @@
-#include "engine.h"
+#include "core.h"
 
-v::Engine::Engine(EngineSettings & _settings) {
+v::Engine::Engine(v::engine::EngineSettings & _settings) {
     settings = _settings;
 }
 
 v::Engine::Engine() {
-    v::EngineSettings setts;
+    v::engine::EngineSettings setts;
     settings = setts;
 }
 
 v::Engine::~Engine() {
     for(auto model : models)
         delete model;
+    for(auto shader : shaders) {
+        shader->Delete();
+        delete shader;
+    }
 }
 
 void v::Engine::loadModels(std::string & path) {
@@ -23,7 +27,8 @@ void v::Engine::loadModels(std::vector<std::string> & paths) {
 }
 
 v::renderer::Camera * v::Engine::camera = nullptr;
-v::EngineSettings v::Engine::settings = {};
+v::engine::EngineSettings v::Engine::settings = {};
+std::mutex v::Engine::mtx;
 
 void v::Engine::engine_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
@@ -77,50 +82,13 @@ void v::Engine::Run() {
 
     loadModels(settings.model_paths);
 
-    double prevTime = 0.0;
-    double currTime = 0.0;
-    double diffTime;
-
-    unsigned int counter = 0;
+    
 
     if(!settings.VSYNC)
         glfwSwapInterval(0);
     
-    if(Init()) {
-        while(!glfwWindowShouldClose(window)) {
-            currTime = glfwGetTime();
-            diffTime = currTime - prevTime;
-        
-            counter++;
-
-            if(diffTime >= settings.tickrate) {
-                std::string FPS = std::to_string((1.0 / diffTime) * counter);
-                std::string MS = std::to_string(((diffTime / counter) * 1000.0));
-                std::string Title = std::string(settings.appName) + std::string(" - ") + FPS + "FPS | " + MS + " ms";
-            
-                if(!Tickrate(diffTime))
-                    break;
-
-                glfwSetWindowTitle(window, Title.c_str());
-                prevTime = currTime;
-                counter = 0;
-            }
-
-            glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
-            camera->Inputs(window);
-        
-            camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
-
-            if(!Draw())
-                break;
-
-	    glfwSwapBuffers(window);
-        
-	    glfwPollEvents();
-        }
-    }
+    if(Init())
+        main_thread();
  
     default_shaderProgram->Delete();
 
@@ -132,4 +100,52 @@ void v::Engine::Run() {
     glfwTerminate();
     
     return;
+}
+
+void v::Engine::main_thread() {
+    double prevTime = 0.0;
+    double currTime = 0.0;
+    double diffTime;
+
+    unsigned int counter = 0;
+
+    double camPrevTime = 0.0;
+    double camDiffTime;
+
+    while(!glfwWindowShouldClose(window)) {
+        currTime = glfwGetTime();
+        diffTime = currTime - prevTime;
+
+        counter++;
+
+        camDiffTime = currTime - camPrevTime;
+
+        if(diffTime >= settings.tickrate) {
+            std::string FPS = std::to_string((1.0 / diffTime) * counter);
+            std::string MS = std::to_string(((diffTime / counter) * 1000.0));
+            std::string Title = std::string(settings.appName) + std::string(" - ") + FPS + "FPS | " + MS + " ms";
+            
+            if(!Tickrate(diffTime))
+                break;
+
+            glfwSetWindowTitle(window, Title.c_str());
+            prevTime = currTime;
+            counter = 0;
+        }
+
+        glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        
+        if(camDiffTime >= 1.0 / 1000.0)
+            camera->Inputs(window);
+        
+        camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
+
+        if(!Draw())
+            break;
+
+        glfwSwapBuffers(window);
+        
+        glfwPollEvents();
+    }
 }

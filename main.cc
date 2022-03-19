@@ -2,7 +2,7 @@
 
 class App : public v::Engine {
     public:
-        App(v::EngineSettings setts) : v::Engine(setts) {};
+        App(v::engine::EngineSettings setts) : v::Engine(setts) {};
         App() : v::Engine() {};
 
         bool Init() override {
@@ -21,9 +21,8 @@ class App : public v::Engine {
 };
 
 int main() {
-    
-    v::EngineSettings setts;
-        
+    v::engine::EngineSettings setts;
+
     setts.model_paths.push_back("\\V\\renderer\\Resources\\Models\\statue\\scene.gltf");
 
     App application(setts);
