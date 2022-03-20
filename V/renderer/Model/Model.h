@@ -17,10 +17,6 @@ namespace v {
 
                 std::vector<v::renderer::Mesh> meshes;
                 
-          //      glm::vec3 translation = glm::vec3(0.0F, 0.0F, 0.0F);
-          //      glm::quat rotation = glm::quat(1.0F, 0.0F, 0.0F, 0.0F);
-         //       glm::vec3 scale = glm::vec3(1.0F, 1.0F, 1.0F);
-
                 std::vector<glm::vec3> translationsMeshes;
                 std::vector<glm::quat> rotationsMeshes;
                 std::vector<glm::vec3> scalesMeshes;
@@ -45,12 +41,10 @@ namespace v {
                 std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);
                 std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
 
-            public:
+            protected:
                 Model(const char * file);
 
-                void Draw(Shader & shader, Camera & cam);
-
-        //        void Rotate(glm::quat rotation);
+                void draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
         };
     }
 }

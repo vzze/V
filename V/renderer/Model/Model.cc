@@ -11,9 +11,9 @@ v::renderer::Model::Model(const char * file) {
     TraverseNode(0);
 }
 
-void v::renderer::Model::Draw(Shader & shader, Camera & cam) {
+void v::renderer::Model::draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
     for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].Draw(shader, cam, matricesMeshes[i]/*, translation, rotation, scale */);
+        meshes[i].Draw(shader, cam, matricesMeshes[i], translation, rotation, scale);
 }
 
 std::vector<unsigned char> v::renderer::Model::getData() {
@@ -259,6 +259,3 @@ void v::renderer::Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix) {
 	}
 }
 
-//void v::renderer::Model::Rotate(glm::quat rotation) {
-//    Model::rotation = rotation;
-//}

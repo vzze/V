@@ -9,6 +9,7 @@
 #include <future>
 
 #include "../../Util/Util.h"
+#include "../../renderer/Model/Model.h"
 
 namespace v {
     namespace engine {
@@ -44,6 +45,7 @@ namespace v {
 
             bool VSYNC = true;
         };
+
         // any thread created should not edit opengl variables
         // or call opengl functions
         // by default opengl is linked to the main thread
@@ -58,6 +60,24 @@ namespace v {
                 inline return_value get() { promise_resolved = true; return f.get(); }
 
                 ~Thread() { if(!promise_resolved) f.get(); }
+        };
+
+        class Object : public v::renderer::Model {
+            private:
+                glm::vec3 translation = glm::vec3(0.0F, 0.0F, 0.0F);
+                glm::quat rotation = glm::quat(1.0F, 0.0F, 0.0F, 0.0F);
+                glm::vec3 scale = glm::vec3(1.0F, 1.0F, 1.0F);
+                
+            public:
+                Object(const char * model_path) : v::renderer::Model(model_path) {}
+                
+                void Draw(v::renderer::Shader & shader, v::renderer::Camera & cam);
+                // default is quat(1.0F, 0.0F, 0.0F, 0.0F);
+                void Rotate(float degrees, glm::vec3 axis);
+                // default coords is 0.0F, 0.0F, 0.0F
+                void MoveTo(float x, float y, float z);
+                // default scale is 1.0F, 1.0F, 1.0F
+                void Scale(float x, float y, float z);
         };
     }
 }

@@ -1,36 +1,36 @@
 #include "core.h"
 
-v::Engine::Engine(v::engine::EngineSettings & _settings) {
+v::engine::Core::Core(v::engine::EngineSettings & _settings) {
     settings = _settings;
 }
 
-v::Engine::Engine() {
+v::engine::Core::Core() {
     v::engine::EngineSettings setts;
     settings = setts;
 }
 
-v::Engine::~Engine() {
-    for(auto model : models)
-        delete model;
+v::engine::Core::~Core() {
+    for(auto object : objects)
+        delete object;
     for(auto shader : shaders) {
         shader->Delete();
         delete shader;
     }
 }
 
-void v::Engine::loadModels(std::string & path) {
-    models.push_back(new v::renderer::Model(v::util::normalized_path(path.c_str()).c_str()));
+void v::engine::Core::loadModels(std::string & path) {
+    objects.push_back(new v::engine::Object(v::util::normalized_path(path.c_str()).c_str()));
 }
-void v::Engine::loadModels(std::vector<std::string> & paths) {
+void v::engine::Core::loadModels(std::vector<std::string> & paths) {
     for(auto path : paths)
-        models.push_back(new v::renderer::Model(v::util::normalized_path(path.c_str()).c_str()));
+        objects.push_back(new v::engine::Object(v::util::normalized_path(path.c_str()).c_str()));
 }
 
-v::renderer::Camera * v::Engine::camera = nullptr;
-v::engine::EngineSettings v::Engine::settings = {};
-std::mutex v::Engine::mtx;
+v::renderer::Camera * v::engine::Core::camera = nullptr;
+v::engine::EngineSettings v::engine::Core::settings = {};
+std::mutex v::engine::Core::mtx;
 
-void v::Engine::engine_callback(GLFWwindow * window, int width, int height) {
+void v::engine::Core::engine_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
     settings.height = height;
 
@@ -39,7 +39,7 @@ void v::Engine::engine_callback(GLFWwindow * window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void v::Engine::Run() {
+void v::engine::Core::Run() {
     glfwInit(); 
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -82,8 +82,6 @@ void v::Engine::Run() {
 
     loadModels(settings.model_paths);
 
-    
-
     if(!settings.VSYNC)
         glfwSwapInterval(0);
     
@@ -102,7 +100,7 @@ void v::Engine::Run() {
     return;
 }
 
-void v::Engine::main_thread() {
+void v::engine::Core::main_thread() {
     double prevTime = 0.0;
     double currTime = 0.0;
     double diffTime;
