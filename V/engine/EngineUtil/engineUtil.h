@@ -50,7 +50,7 @@ namespace v {
         // or call opengl functions
         // by default opengl is linked to the main thread
         template<typename return_value, typename function, typename... Args>
-        class Thread {
+        class Thread final {
             private:
                 std::future<return_value> f;
                 bool promise_resolved = false;
@@ -71,6 +71,8 @@ namespace v {
             public:
                 Object(const char * model_path) : v::renderer::Model(model_path) {}
                 
+                virtual ~Object();
+
                 void Draw(v::renderer::Shader & shader, v::renderer::Camera & cam);
                 // default is quat(1.0F, 0.0F, 0.0F, 0.0F);
                 void Rotate(float degrees, glm::vec3 axis);

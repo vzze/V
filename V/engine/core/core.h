@@ -35,7 +35,7 @@ namespace v {
                 // no models are loaded
                 Core();
 
-                ~Core();
+                virtual ~Core();
                 // Inner settings can still be changed in Init
                 // It is recommended to create settings before class creation
                 // and give as @param to v::Engine::Engine(v::EngineSettings)

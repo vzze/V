@@ -32,6 +32,8 @@ namespace v {
                 float sensitivity = 100.0F;
 
                 Camera(int width, int height, glm::vec3 position);
+                
+                virtual ~Camera();
 
                 void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 

@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+v::renderer::Camera::~Camera() {}
+
 v::renderer::Camera::Camera(int width, int height, glm::vec3 position) {
     Camera::width = width;
     

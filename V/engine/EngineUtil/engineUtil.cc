@@ -1,5 +1,7 @@
 #include "engineUtil.h"
 
+v::engine::Object::~Object() {}
+
 void v::engine::Object::Draw(v::renderer::Shader &shader, v::renderer::Camera &cam) {
     draw(shader, cam, translation, rotation, scale);    
 }

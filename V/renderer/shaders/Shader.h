@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <cstring>
 
 #include "../../Util/Util.h"
 
@@ -17,7 +18,7 @@ namespace v {
                 GLuint ID;
 
                 Shader(const char * vertexFile, const char * fragmentFile);
-
+                
                 void Activate();
                 
                 void Delete();

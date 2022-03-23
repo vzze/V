@@ -51,7 +51,7 @@ void v::renderer::Shader::compileErr(unsigned int shader, const char * type) {
     
     GLint hasCompiled;
     char info[1024];
-    if(type != "PROGRAM") {
+    if(strcmp(type, "PROGRAM")) {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
         if(hasCompiled == GL_FALSE) {
             glGetShaderInfoLog(shader, 1024, NULL, info);
