@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <glm.hpp>
+
 #include <filesystem>
 #include <string>
 #include <fstream>
@@ -12,6 +14,10 @@ namespace v {
     namespace util {
         void log(const char * output);
         
+        extern const glm::vec3 Xaxis;
+        extern const glm::vec3 Yaxis;
+        extern const glm::vec3 Zaxis;
+
         extern const std::string default_vertex_shader_path;
         extern const std::string default_fragment_shader_path;
 

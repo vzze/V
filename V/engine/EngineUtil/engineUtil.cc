@@ -7,7 +7,7 @@ void v::engine::Object::Draw(v::renderer::Shader &shader, v::renderer::Camera &c
 }
 
 void v::engine::Object::Rotate(float degrees, glm::vec3 axis) { 
-    v::engine::Object::rotation = glm::angleAxis(glm::radians(degrees), axis);
+    rotation = glm::normalize(rotation * glm::angleAxis(glm::radians(degrees), axis));
 }
 
 void v::engine::Object::MoveTo(float x, float y, float z) {

@@ -40,8 +40,8 @@ void v::engine::Core::engine_callback(GLFWwindow * window, int width, int height
 }
 
 void v::engine::Core::Run() {
-    glfwInit(); 
-    
+    glfwInit();
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -53,14 +53,14 @@ void v::engine::Core::Run() {
         glfwTerminate();
         return;
     }
-    
+ 
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, this->engine_callback); 
-    
+    glfwSetFramebufferSizeCallback(window, this->engine_callback);
+ 
     gladLoadGL();
-    
+
     glViewport(0, 0, settings.width, settings.height);
-    
+
     default_shaderProgram = new v::renderer::Shader(settings.vertexShaderPath, settings.fragmentShaderPath);
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -68,7 +68,7 @@ void v::engine::Core::Run() {
     glm::mat4 lightModel = glm::mat4(1.0f);
 
     lightModel = glm::translate(lightModel, lightPos);
-    
+ 
     default_shaderProgram->Activate();
     glUniform4f(glGetUniformLocation(default_shaderProgram->ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(default_shaderProgram->ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
@@ -137,7 +137,7 @@ void v::engine::Core::main_thread() {
 
         glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
+ 
         if(tickrateDiffTime >= settings.tickrate) {
             if(!Tickrate(diffTime))
                 break;
@@ -148,14 +148,14 @@ void v::engine::Core::main_thread() {
             camera->Inputs(window);
             camPrevTime = currTime;
         }
-        
+
         camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
         if(!Draw())
             break;
 
         glfwSwapBuffers(window);
-        
+
         glfwPollEvents();
     }
 }
