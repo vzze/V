@@ -101,8 +101,9 @@ void v::engine::Core::Run() {
 }
 
 void v::engine::Core::main_thread() {
+    double currTime;
+
     double prevTime = 0.0;
-    double currTime = 0.0;
     double diffTime;
 
     unsigned int counter = 0;
@@ -110,21 +111,24 @@ void v::engine::Core::main_thread() {
     double camPrevTime = 0.0;
     double camDiffTime;
 
+    double tickratePrevTime = 0.0;
+    double tickrateDiffTime;
+
     while(!glfwWindowShouldClose(window)) {
         currTime = glfwGetTime();
-        diffTime = currTime - prevTime;
 
-        counter++;
+        diffTime = currTime - prevTime;
 
         camDiffTime = currTime - camPrevTime;
 
-        if(diffTime >= settings.tickrate) {
+        tickrateDiffTime = currTime - tickratePrevTime;
+
+        counter++;
+
+        if(diffTime >= 1.0 / 30.0) {
             std::string FPS = std::to_string((1.0 / diffTime) * counter);
             std::string MS = std::to_string(((diffTime / counter) * 1000.0));
             std::string Title = std::string(settings.appName) + std::string(" - ") + FPS + "FPS | " + MS + " ms";
-            
-            if(!Tickrate(diffTime))
-                break;
 
             glfwSetWindowTitle(window, Title.c_str());
             prevTime = currTime;
@@ -134,8 +138,16 @@ void v::engine::Core::main_thread() {
         glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         
-        if(camDiffTime >= 1.0 / 1000.0)
+        if(tickrateDiffTime >= settings.tickrate) {
+            if(!Tickrate(diffTime))
+                break;
+            tickratePrevTime = currTime;
+        }
+
+        if(camDiffTime >= 1.0 / 1000.0) {
             camera->Inputs(window);
+            camPrevTime = currTime;
+        }
         
         camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 

@@ -32,6 +32,7 @@ int main() {
     v::engine::EngineSettings setts;
 
     setts.model_paths.push_back("\\V\\renderer\\Resources\\Models\\statue\\scene.gltf");
+    setts.tickrate = 1.0 / 128.0;
 
     App application(setts);
 
