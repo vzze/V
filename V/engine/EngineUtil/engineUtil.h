@@ -43,6 +43,9 @@ namespace v {
             bool fullscreen = false;
         };
 
+        void read_engineSettings(EngineSettings & setts, std::string path);
+        EngineSettings read_engineSettings(std::string path);
+
         class Object : public v::renderer::Model {
             public:
                 glm::vec3 translation = glm::vec3(0.0F, 0.0F, 0.0F);

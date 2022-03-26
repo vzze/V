@@ -31,14 +31,7 @@ class App : public v::engine::Core {
 };
 
 int main() {
-    v::engine::EngineSettings setts;
-
-    setts.model_paths.push_back("\\V\\renderer\\Resources\\Models\\statue\\scene.gltf");
-    setts.model_paths.push_back("\\V\\renderer\\Resources\\Models\\crow\\scene.gltf");
-
-    setts.tickrate = 1.0 / 128.0;
-
-    App application(setts);
+    App application(v::engine::read_engineSettings("\\app_settings.json"));
 
     application.Run();
 }

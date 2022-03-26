@@ -30,5 +30,6 @@ namespace v {
         std::string get_file(const char * file);
         // Format: \\Path\\to\\file
         std::string normalized_path(const char * path);
+
     }
 }

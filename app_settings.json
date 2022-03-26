@@ -1,0 +1,24 @@
+{
+    "width": 800,
+    "height": 800,
+    "camera_position": [0.0, 0.0, 2.0],
+
+    "cameraFOVdegrees": 45.0,
+    "cameraNearPlane": 0.1,
+    "cameraFarPlane": 100.0,
+
+    "vertexShaderPath": "",
+    "fragmentShaderPath": "",
+        
+    "model_paths": [
+        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf",
+        "\\V\\renderer\\Resources\\Models\\crow\\scene.gltf"
+    ],
+        
+    "appName": "V",
+
+    "tickrate": 0.015625,
+            
+    "VSYNC": true,
+    "fullscreen": true
+}
