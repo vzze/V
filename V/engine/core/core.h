@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <mutex>
+#include <future>
 
 #include "../../renderer/renderer.h"
 #include "../../Util/Util.h"
@@ -23,10 +24,6 @@ namespace v {
                 v::renderer::Shader * default_shaderProgram;
 
                 static v::renderer::Camera * camera;
-
-                // for any v::engine::Thread s created inside functions thread
-                // shared variables should be locked with this mutex
-                static std::mutex mtx;
 
                 GLFWwindow * window = NULL;
 

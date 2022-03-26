@@ -28,7 +28,6 @@ void v::engine::Core::loadModels(std::vector<std::string> & paths) {
 
 v::renderer::Camera * v::engine::Core::camera = nullptr;
 v::engine::EngineSettings v::engine::Core::settings = {};
-std::mutex v::engine::Core::mtx;
 
 void v::engine::Core::engine_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;

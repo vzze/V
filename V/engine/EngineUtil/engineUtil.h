@@ -41,7 +41,7 @@ namespace v {
             char * appName = const_cast<char*>("V");
 
             double tickrate = 1.0 / 64.0;
-
+            
             bool VSYNC = true;
         };
 
