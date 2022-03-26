@@ -38,8 +38,6 @@ int main() {
 
     setts.tickrate = 1.0 / 128.0;
 
-    setts.fullscreen = false;
-
     App application(setts);
 
     application.Run();
