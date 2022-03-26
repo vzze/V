@@ -1,4 +1,5 @@
 #include "core.h"
+#include "GLFW/glfw3.h"
 
 v::engine::Core::Core(v::engine::EngineSettings & _settings) {
     settings = _settings;
@@ -29,7 +30,11 @@ void v::engine::Core::loadModels(std::vector<std::string> & paths) {
 v::renderer::Camera * v::engine::Core::camera = nullptr;
 v::engine::EngineSettings v::engine::Core::settings = {};
 
-void v::engine::Core::engine_callback(GLFWwindow * window, int width, int height) {
+GLFWwindow * v::engine::Core::window = nullptr;
+GLFWmonitor * v::engine::Core::monitor = nullptr;
+GLFWwindow * v::engine::Core::share = nullptr;
+
+void v::engine::Core::window_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
     settings.height = height;
 
@@ -38,24 +43,68 @@ void v::engine::Core::engine_callback(GLFWwindow * window, int width, int height
     glViewport(0, 0, width, height);
 }
 
+void v::engine::Core::key_callback(GLFWwindow * window, int key, int scancode, int action, int mods) {
+    if(key == GLFW_KEY_F11 && action == GLFW_PRESS) {
+        SetFullscreen(!isFullscreen());
+        settings.fullscreen = isFullscreen();
+    }
+}
+
+bool v::engine::Core::isFullscreen() {
+    return glfwGetWindowMonitor(window) != nullptr;
+}
+
+void v::engine::Core::SetFullscreen(bool fullscreen) {
+    if(isFullscreen() == fullscreen)
+        return;
+
+    if(fullscreen) {
+        const auto mode = glfwGetVideoMode(monitor);
+        glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    } else {
+        const auto mode = glfwGetVideoMode(monitor);
+        glfwSetWindowMonitor(window, nullptr, 50, 50, (int)((float)(mode->width) * 3.0F / 4.0F), (int)((float)(mode->height) * 3.0F / 4.0F), mode->refreshRate);
+    }
+
+}
+
 void v::engine::Core::Run() {
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(settings.width, settings.height, settings.appName, settings.monitor, settings.share);
+    monitor = glfwGetPrimaryMonitor();
+
+    const auto mode = glfwGetVideoMode(monitor);
+
+    if(!settings.fullscreen) {
+        window = glfwCreateWindow(settings.width, settings.height, settings.appName, nullptr, share);
     
+        int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
+
+        glfwSetWindowMonitor(window, nullptr, xpos, ypos, settings.width, settings.height, mode->refreshRate);
+    } else {
+        window = glfwCreateWindow(mode->width, mode->height, settings.appName, monitor, share);
+
+        int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
+        
+        glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+        settings.width = mode->width;
+        settings.height = mode->height;
+    }
+
     if(window == NULL) {
         v::util::log("Failed to create GLFW window\n");
         glfwTerminate();
         return;
     }
- 
+
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, this->engine_callback);
- 
+    glfwSetFramebufferSizeCallback(window, this->window_callback);
+    glfwSetKeyCallback(window, this->key_callback);
+
     gladLoadGL();
 
     glViewport(0, 0, settings.width, settings.height);

@@ -30,9 +30,6 @@ namespace v {
             float cameraNearPlane = 0.1F;
             float cameraFarPlane = 100.0F;
 
-            GLFWmonitor * monitor = NULL;
-            GLFWwindow * share = NULL;
-
             char * vertexShaderPath = const_cast<char*>(v::util::default_vertex_shader_path.c_str());
             char * fragmentShaderPath = const_cast<char*>(v::util::default_fragment_shader_path.c_str()); 
         
@@ -43,6 +40,7 @@ namespace v {
             double tickrate = 1.0 / 64.0;
             
             bool VSYNC = true;
+            bool fullscreen = false;
         };
 
         class Object : public v::renderer::Model {

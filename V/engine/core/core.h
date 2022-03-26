@@ -25,7 +25,9 @@ namespace v {
 
                 static v::renderer::Camera * camera;
 
-                GLFWwindow * window = NULL;
+                static GLFWwindow * window;
+                static GLFWwindow * share;
+                static GLFWmonitor * monitor;
 
                 Core(v::engine::EngineSettings & _settings);
                 // default settings are applied
@@ -50,9 +52,13 @@ namespace v {
                 // path is normalized inside function
                 // \\Path\\to\\Model
                 void loadModels(std::vector<std::string> & paths);
+
+                static bool isFullscreen();
+                static void SetFullscreen(bool fullscreen);
             private:
                 void main_thread();
-                static void engine_callback(GLFWwindow * window, int width, int heigh);
+                static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods);
+                static void window_callback(GLFWwindow * window, int width, int heigh);
         };
     }
 }
