@@ -32,6 +32,9 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
         setts.fragmentShaderPath = const_cast<char*>(fragP.c_str());
     }
 
+    if(obj["appName"] == "")
+        setts.appName = const_cast<char*>("V");
+
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
 
@@ -69,6 +72,9 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
         std::string fragP = obj["fragmentShaderPath"];
         setts.fragmentShaderPath = const_cast<char*>(fragP.c_str());
     }
+
+    if(obj["appName"] == "")
+        setts.appName = const_cast<char*>("V");
 
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
