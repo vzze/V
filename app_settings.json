@@ -15,10 +15,10 @@
         "\\V\\renderer\\Resources\\Models\\crow\\scene.gltf"
     ],
         
-    "appName": "V",
+    "appName": "lmao",
 
     "tickrate": 0.015625,
             
     "VSYNC": true,
-    "fullscreen": true
+    "fullscreen": false
 }

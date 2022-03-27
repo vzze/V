@@ -79,13 +79,13 @@ void v::engine::Core::Run() {
     const auto mode = glfwGetVideoMode(monitor);
 
     if(!settings.fullscreen) {
-        window = glfwCreateWindow(settings.width, settings.height, settings.appName, nullptr, share);
+        window = glfwCreateWindow(settings.width, settings.height, settings.appName.c_str(), nullptr, share);
     
         int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
 
         glfwSetWindowMonitor(window, nullptr, xpos, ypos, settings.width, settings.height, mode->refreshRate);
     } else {
-        window = glfwCreateWindow(mode->width, mode->height, settings.appName, monitor, share);
+        window = glfwCreateWindow(mode->width, mode->height, settings.appName.c_str(), monitor, share);
 
         int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
         
@@ -109,7 +109,7 @@ void v::engine::Core::Run() {
 
     glViewport(0, 0, settings.width, settings.height);
 
-    default_shaderProgram = new v::renderer::Shader(settings.vertexShaderPath, settings.fragmentShaderPath);
+    default_shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -176,7 +176,7 @@ void v::engine::Core::main_thread() {
         if(diffTime >= 1.0 / 30.0) {
             std::string FPS = std::to_string((1.0 / diffTime) * counter);
             std::string MS = std::to_string(((diffTime / counter) * 1000.0));
-            std::string Title = std::string(settings.appName) + std::string(" - ") + FPS + "FPS | " + MS + " ms";
+            std::string Title = settings.appName + " - " + FPS + "FPS | " + MS + " ms";
 
             glfwSetWindowTitle(window, Title.c_str());
             prevTime = currTime;

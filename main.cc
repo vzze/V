@@ -16,7 +16,7 @@ class App : public v::engine::Core {
         }
 
         bool Tickrate(double difftime) override {
-            
+
             for(auto object : objects)
                 object->Rotate(1.0F / 4.0F, v::util::Yaxis);
 
