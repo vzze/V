@@ -56,7 +56,7 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	if(firstClick) {
-    	    glfwSetCursorPos(window, (width / 2), (height / 2));
+    	    glfwSetCursorPos(window, (width / 2), (height / 2)); // NOLINT
 	    firstClick = false;
 	}
 
@@ -65,8 +65,8 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
 
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-	float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
-	float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
+	float rotX = sensitivity * (float)(mouseY - (height / 2)) / height; // NOLINT
+	float rotY = sensitivity * (float)(mouseX - (width / 2)) / width; // NOLINT
 
 	glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
 
@@ -76,8 +76,7 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
 
 	Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
 
-	glfwSetCursorPos(window, (width / 2), (height / 2));
-
+	glfwSetCursorPos(window, (width / 2), (height / 2)); // NOLINT
     } else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             
