@@ -34,12 +34,20 @@ GLFWwindow * v::engine::Core::window = nullptr;
 GLFWmonitor * v::engine::Core::monitor = nullptr;
 GLFWwindow * v::engine::Core::share = nullptr;
 
+v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
+
 void v::engine::Core::window_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
     settings.height = height;
 
     camera->width = width;
     camera->height = height;
+
+    framebuffer->Delete();
+    delete framebuffer;
+    framebuffer = new v::renderer::Framebuffer();
+    framebuffer->Bind(width, height);
+
     glViewport(0, 0, width, height);
 }
 
@@ -111,6 +119,11 @@ void v::engine::Core::Run() {
 
     default_shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
 
+    std::string frag_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.frag");
+    std::string vert_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.vert");
+
+    default_framebufferProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
+
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -121,6 +134,9 @@ void v::engine::Core::Run() {
     glUniform4f(glGetUniformLocation(default_shaderProgram->ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(default_shaderProgram->ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
     
+    default_framebufferProgram->Activate();
+    glUniform1i(glGetUniformLocation(default_framebufferProgram->ID, "screenTexture"), 0);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -130,6 +146,10 @@ void v::engine::Core::Run() {
 
     loadModels(settings.model_paths);
 
+    framebuffer = new v::renderer::Framebuffer();
+
+    framebuffer->Bind(settings.width, settings.height);
+
     if(!settings.VSYNC)
         glfwSwapInterval(0);
     
@@ -137,8 +157,14 @@ void v::engine::Core::Run() {
         main_thread();
  
     default_shaderProgram->Delete();
+    default_framebufferProgram->Delete();
 
     delete default_shaderProgram;
+    delete default_framebufferProgram;
+
+    framebuffer->Delete();
+
+    delete framebuffer;
     delete camera;
 
     glfwDestroyWindow(window);
@@ -183,9 +209,13 @@ void v::engine::Core::main_thread() {
             counter = 0;
         }
 
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
+
         glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
- 
+
+        glEnable(GL_DEPTH_TEST);
+
         if(tickrateDiffTime >= settings.tickrate) {
             if(!Tickrate(diffTime))
                 break;
@@ -201,6 +231,16 @@ void v::engine::Core::main_thread() {
 
         if(!Draw())
             break;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        default_framebufferProgram->Activate();
+        glBindVertexArray(framebuffer->rectVAO);
+
+        glDisable(GL_DEPTH_TEST);
+
+        glBindTexture(GL_TEXTURE_2D, framebuffer->framebufferTexture);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
 

@@ -11,8 +11,7 @@
     "fragmentShaderPath": "",
         
     "model_paths": [
-        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf",
-        "\\V\\renderer\\Resources\\Models\\crow\\scene.gltf"
+        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf"
     ],
         
     "appName": "lmao",

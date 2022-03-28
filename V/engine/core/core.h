@@ -22,6 +22,10 @@ namespace v {
                 std::vector<v::renderer::Shader*> shaders;
 
                 v::renderer::Shader * default_shaderProgram;
+                v::renderer::Shader * default_framebufferProgram;
+                
+                // framebuffer width and height need to be updated during opengl callback
+                static v::renderer::Framebuffer * framebuffer;
 
                 static v::renderer::Camera * camera;
 

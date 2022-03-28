@@ -7,18 +7,16 @@ class App : public v::engine::Core {
 
         bool Init() override {
             objects.at(0)->Scale(1.5F, 1.5F, 1.5F);
-
-            objects.at(1)->MoveTo(0.0F, 0.0F, 0.0F);
-
-            objects.at(1)->Scale(0.25, 0.25, 0.25);
-
             return true;
         }
 
         bool Tickrate(double difftime) override {
 
-            for(auto object : objects)
-                object->Rotate(1.0F / 4.0F, v::util::Yaxis);
+            /* for(auto object : objects) { */
+                /* object->Rotate(1.0F / 4.0F, v::util::Yaxis); */
+                /* object->Rotate(1.0F / 4.0F, v::util::Xaxis); */
+                /* object->Rotate(1.0F / 4.0F, v::util::Zaxis); */
+            /* } */
 
             return true;
         }

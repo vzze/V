@@ -12,15 +12,15 @@ v::renderer::Camera::Camera(int width, int height, glm::vec3 position) {
 
 void v::renderer::Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
     glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
 
-	// Makes camera look in the right direction from the right position
-	view = glm::lookAt(Position, Position + Orientation, Up);
-	// Adds perspective to the scene
-	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
+    // Makes camera look in the right direction from the right position
+    view = glm::lookAt(Position, Position + Orientation, Up);
+    // Adds perspective to the scene
+    projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
 
-	// Sets new camera matrix
-	cameraMatrix = projection * view;
+    // Sets new camera matrix
+    cameraMatrix = projection * view;
 }
 
 void v::renderer::Camera::Matrix(Shader & shader, const char * uniform) {
@@ -28,7 +28,7 @@ void v::renderer::Camera::Matrix(Shader & shader, const char * uniform) {
 }
 
 void v::renderer::Camera::Inputs(GLFWwindow * window) {
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         Position += speed * Orientation;
 	
     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) 
@@ -55,8 +55,8 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
     if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-	if (firstClick) {
-    	    glfwSetCursorPos(window, ((double)width / 2.0), ((double)height / 2.0));
+	if(firstClick) {
+    	    glfwSetCursorPos(window, (width / 2), (height / 2));
 	    firstClick = false;
 	}
 
@@ -65,8 +65,8 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
 
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-	float rotX = sensitivity * (float)(mouseY - ((float)height / 2.0F)) / (float)height;
-	float rotY = sensitivity * (float)(mouseX - ((float)width / 2.0F)) / (float)width;
+	float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
+	float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
 
 	glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
 
@@ -76,7 +76,7 @@ void v::renderer::Camera::Inputs(GLFWwindow * window) {
 
 	Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
 
-	glfwSetCursorPos(window, ((double)width / 2.0), ((double)height / 2.0));
+	glfwSetCursorPos(window, (width / 2), (height / 2));
 
     } else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
