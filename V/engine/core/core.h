@@ -22,7 +22,8 @@ namespace v {
                 std::vector<v::renderer::Shader*> shaders;
 
                 v::renderer::Shader * default_shaderProgram;
-                v::renderer::Shader * default_framebufferProgram;
+                // uniform width and height need to be updated during opengl callback
+                static v::renderer::Shader * default_framebufferProgram;
                 
                 // framebuffer width and height need to be updated during opengl callback
                 static v::renderer::Framebuffer * framebuffer;

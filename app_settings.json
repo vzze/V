@@ -11,10 +11,11 @@
     "fragmentShaderPath": "",
         
     "model_paths": [
-        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf"
+        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf",
+        "\\V\\renderer\\Resources\\Models\\crow\\scene.gltf"
     ],
         
-    "appName": "lmao",
+    "appName": "V",
 
     "tickrate": 0.015625,
             

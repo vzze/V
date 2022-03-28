@@ -35,6 +35,7 @@ GLFWmonitor * v::engine::Core::monitor = nullptr;
 GLFWwindow * v::engine::Core::share = nullptr;
 
 v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
+v::renderer::Shader * v::engine::Core::default_framebufferProgram = nullptr;
 
 void v::engine::Core::window_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
@@ -47,6 +48,9 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     delete framebuffer;
     framebuffer = new v::renderer::Framebuffer();
     framebuffer->Bind(width, height);
+
+    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_x"), 1.0F / (float)(width));
+    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_y"), 1.0F / (float)(height));
 
     glViewport(0, 0, width, height);
 }
@@ -136,6 +140,9 @@ void v::engine::Core::Run() {
     
     default_framebufferProgram->Activate();
     glUniform1i(glGetUniformLocation(default_framebufferProgram->ID, "screenTexture"), 0);
+
+    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_x"), 1.0F / (float)(settings.width));
+    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_y"), 1.0F / (float)(settings.height));
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
