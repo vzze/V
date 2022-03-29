@@ -44,6 +44,7 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
 
     setts.tickrate = obj["tickrate"];
     setts.fullscreen = obj["fullscreen"];
+    setts.VSYNC = obj["VSYNC"];
     return setts;
 }
 
@@ -89,6 +90,7 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
 
     setts.tickrate = obj["tickrate"];
     setts.fullscreen = obj["fullscreen"];
+    setts.VSYNC = obj["VSYNC"];
 }
 
 v::engine::Object::~Object() {}

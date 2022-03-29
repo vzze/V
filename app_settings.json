@@ -19,6 +19,6 @@
 
     "tickrate": 0.015625,
             
-    "VSYNC": true,
+    "VSYNC": false,
     "fullscreen": false
 }

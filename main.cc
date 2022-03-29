@@ -12,11 +12,11 @@ class App : public v::engine::Core {
 
         bool Tickrate(double difftime) override {
 
-            /* for(auto object : objects) { */
-                /* object->Rotate(1.0F / 4.0F, v::util::Yaxis); */
-                /* object->Rotate(1.0F / 4.0F, v::util::Xaxis); */
-                /* object->Rotate(1.0F / 4.0F, v::util::Zaxis); */
-            /* } */
+            for(auto object : objects) {
+                object->Rotate(1.0F / 4.0F, v::util::Yaxis);
+                object->Rotate(1.0F / 4.0F, v::util::Xaxis);
+                object->Rotate(1.0F / 4.0F, v::util::Zaxis);
+            }
 
             return true;
         }
