@@ -10,15 +10,6 @@ v::engine::Core::Core() {
     settings = setts;
 }
 
-v::engine::Core::~Core() {
-    for(auto object : objects)
-        delete object;
-    for(auto shader : shaders) {
-        shader->Delete();
-        delete shader;
-    }
-}
-
 void v::engine::Core::loadModels(std::string & path) {
     objects.push_back(new v::engine::Object(v::util::normalized_path(path.c_str()).c_str()));
 }
@@ -28,14 +19,13 @@ void v::engine::Core::loadModels(std::vector<std::string> & paths) {
 }
 
 v::renderer::Camera * v::engine::Core::camera = nullptr;
-v::engine::EngineSettings v::engine::Core::settings = {};
 
-GLFWwindow * v::engine::Core::window = nullptr;
-GLFWmonitor * v::engine::Core::monitor = nullptr;
-GLFWwindow * v::engine::Core::share = nullptr;
+v::engine::EngineSettings v::engine::Core::settings = {};
 
 v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
 v::renderer::Shader * v::engine::Core::default_framebufferProgram = nullptr;
+
+v::engine::Window * v::engine::Core::Window = nullptr;
 
 void v::engine::Core::window_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
@@ -57,27 +47,9 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
 
 void v::engine::Core::key_callback(GLFWwindow * window, int key, int scancode, int action, int mods) {
     if(key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-        SetFullscreen(!isFullscreen());
-        settings.fullscreen = isFullscreen();
+        Window->SetFullscreen(!Window->isFullscreen());
+        settings.fullscreen = Window->isFullscreen();
     }
-}
-
-bool v::engine::Core::isFullscreen() {
-    return glfwGetWindowMonitor(window) != nullptr;
-}
-
-void v::engine::Core::SetFullscreen(bool fullscreen) {
-    if(isFullscreen() == fullscreen)
-        return;
-
-    if(fullscreen) {
-        const auto mode = glfwGetVideoMode(monitor);
-        glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-    } else {
-        const auto mode = glfwGetVideoMode(monitor);
-        glfwSetWindowMonitor(window, nullptr, 50, 50, (int)((float)(mode->width) * 3.0F / 4.0F), (int)((float)(mode->height) * 3.0F / 4.0F), mode->refreshRate);
-    }
-
 }
 
 void v::engine::Core::Run() {
@@ -85,37 +57,14 @@ void v::engine::Core::Run() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+   
+    Window = new v::engine::Window(settings);
 
-    monitor = glfwGetPrimaryMonitor();
-
-    const auto mode = glfwGetVideoMode(monitor);
-
-    if(!settings.fullscreen) {
-        window = glfwCreateWindow(settings.width, settings.height, settings.appName.c_str(), nullptr, share);
-    
-        int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
-
-        glfwSetWindowMonitor(window, nullptr, xpos, ypos, settings.width, settings.height, mode->refreshRate);
-    } else {
-        window = glfwCreateWindow(mode->width, mode->height, settings.appName.c_str(), monitor, share);
-
-        int xpos, ypos; glfwGetWindowPos(window, &xpos, &ypos);
-        
-        glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-
-        settings.width = mode->width;
-        settings.height = mode->height;
-    }
-
-    if(window == NULL) {
-        v::util::log("Failed to create GLFW window\n");
-        glfwTerminate();
+    if(Window->failed)
         return;
-    }
 
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, this->window_callback);
-    glfwSetKeyCallback(window, this->key_callback);
+    Window->SetFramebufferSizeCallback(this->window_callback);
+    Window->SetKeyCallback(this->key_callback);
 
     gladLoadGL();
 
@@ -162,7 +111,16 @@ void v::engine::Core::Run() {
     
     if(Init())
         main_thread();
- 
+}
+
+v::engine::Core::~Core() {
+    for(auto object : objects)
+        delete object;
+    for(auto shader : shaders) {
+        shader->Delete();
+        delete shader;
+    }
+
     default_shaderProgram->Delete();
     default_framebufferProgram->Delete();
 
@@ -174,11 +132,7 @@ void v::engine::Core::Run() {
     delete framebuffer;
     delete camera;
 
-    glfwDestroyWindow(window);
-    
-    glfwTerminate();
-    
-    return;
+    delete Window;
 }
 
 void v::engine::Core::main_thread() {
@@ -195,7 +149,7 @@ void v::engine::Core::main_thread() {
     double tickratePrevTime = 0.0;
     double tickrateDiffTime;
 
-    while(!glfwWindowShouldClose(window)) {
+    while(!Window->ShouldClose()) {
         currTime = glfwGetTime();
 
         diffTime = currTime - prevTime;
@@ -211,7 +165,7 @@ void v::engine::Core::main_thread() {
             std::string MS = std::to_string(((diffTime / counter) * 1000.0));
             std::string Title = settings.appName + " - " + FPS + "FPS | " + MS + " ms";
 
-            glfwSetWindowTitle(window, Title.c_str());
+            Window->SetTitle(Title.c_str()); 
             prevTime = currTime;
             counter = 0;
         }
@@ -230,7 +184,7 @@ void v::engine::Core::main_thread() {
         }
 
         if(camDiffTime >= 1.0 / 1000.0) {
-            camera->Inputs(window);
+            camera->Inputs(Window->window);
             camPrevTime = currTime;
         }
 
@@ -239,17 +193,9 @@ void v::engine::Core::main_thread() {
         if(!Draw())
             break;
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        default_framebufferProgram->Activate();
-        glBindVertexArray(framebuffer->rectVAO);
+        framebuffer->Draw(*default_framebufferProgram);
 
-        glDisable(GL_DEPTH_TEST);
-
-        glBindTexture(GL_TEXTURE_2D, framebuffer->framebufferTexture);
-
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        glfwSwapBuffers(window);
+        Window->SwapBuffers();
 
         glfwPollEvents();
     }

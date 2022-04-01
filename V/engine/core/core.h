@@ -3,12 +3,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <mutex>
-#include <future>
-
 #include "../../renderer/renderer.h"
 #include "../../Util/Util.h"
 #include "../EngineUtil/engineUtil.h"
+#include "../Window/Window.h"
 
 namespace v {
     namespace engine {
@@ -22,17 +20,14 @@ namespace v {
                 std::vector<v::renderer::Shader*> shaders;
 
                 v::renderer::Shader * default_shaderProgram;
-                // uniform width and height need to be updated during opengl callback
+
                 static v::renderer::Shader * default_framebufferProgram;
                 
-                // framebuffer width and height need to be updated during opengl callback
                 static v::renderer::Framebuffer * framebuffer;
 
                 static v::renderer::Camera * camera;
 
-                static GLFWwindow * window;
-                static GLFWwindow * share;
-                static GLFWmonitor * monitor;
+                static v::engine::Window * Window;
 
                 Core(v::engine::EngineSettings & _settings);
                 // default settings are applied
@@ -58,8 +53,6 @@ namespace v {
                 // \\Path\\to\\Model
                 void loadModels(std::vector<std::string> & paths);
 
-                static bool isFullscreen();
-                static void SetFullscreen(bool fullscreen);
             private:
                 void main_thread();
                 static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods);

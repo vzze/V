@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include "../../Util/Util.h"
+#include "../shaders/Shader.h"
 
 namespace v {
     namespace renderer {
@@ -33,6 +34,7 @@ namespace v {
 
                 void Bind(GLuint width, GLuint height);
                 void Delete();
+                void Draw(v::renderer::Shader & framebufferProgram);
         };
     }
 }

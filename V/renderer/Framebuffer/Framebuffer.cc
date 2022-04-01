@@ -40,3 +40,16 @@ void v::renderer::Framebuffer::Bind(GLuint width, GLuint height) {
 void v::renderer::Framebuffer::Delete() {
     glDeleteFramebuffers(1, &FBO);
 }
+
+void v::renderer::Framebuffer::Draw(v::renderer::Shader & framebufferProgram) {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    framebufferProgram.Activate();
+    glBindVertexArray(rectVAO);
+
+    glDisable(GL_DEPTH_TEST);
+
+    glBindTexture(GL_TEXTURE_2D, framebufferTexture);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
