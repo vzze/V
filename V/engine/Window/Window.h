@@ -8,7 +8,7 @@
 
 namespace v {
     namespace engine {
-        class Window final {
+        class Window {
             public:
                 GLFWwindow * window = nullptr;
                 GLFWwindow * share = nullptr;
@@ -24,14 +24,14 @@ namespace v {
 
                 void SetFramebufferSizeCallback(GLFWframebuffersizefun fn);
                 void SetKeyCallback(GLFWkeyfun fn);
-                
+
                 bool ShouldClose();
 
                 void SetTitle(const char * title);
 
                 void SwapBuffers();
 
-                ~Window();
+                virtual ~Window();
         };
     }
 }

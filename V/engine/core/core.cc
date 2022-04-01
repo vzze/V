@@ -38,9 +38,9 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     delete framebuffer;
     framebuffer = new v::renderer::Framebuffer();
     framebuffer->Bind(width, height);
-
-    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_x"), 1.0F / (float)(width));
-    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_y"), 1.0F / (float)(height));
+    
+    default_framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
+    default_framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
 
     glViewport(0, 0, width, height);
 }
@@ -84,14 +84,16 @@ void v::engine::Core::Run() {
     lightModel = glm::translate(lightModel, lightPos);
  
     default_shaderProgram->Activate();
-    glUniform4f(glGetUniformLocation(default_shaderProgram->ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    glUniform3f(glGetUniformLocation(default_shaderProgram->ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
+    default_shaderProgram->Uniform4f("lightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    default_shaderProgram->Uniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
     
     default_framebufferProgram->Activate();
-    glUniform1i(glGetUniformLocation(default_framebufferProgram->ID, "screenTexture"), 0);
 
-    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_x"), 1.0F / (float)(settings.width));
-    glUniform1f(glGetUniformLocation(default_framebufferProgram->ID, "offset_y"), 1.0F / (float)(settings.height));
+    default_framebufferProgram->Uniform1i("screenTexture", 0);
+
+    default_framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(settings.width));
+    default_framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(settings.height));
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
