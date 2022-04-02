@@ -69,6 +69,30 @@ void v::engine::Window::SetTitle(const char * title) {
     glfwSetWindowTitle(window, title);
 }
 
+void v::engine::Window::SetIcon(const char * image) {
+    int width, height, nrChannels;
+    
+    stbi_set_flip_vertically_on_load(false);
+    
+    unsigned char * data = stbi_load(v::util::normalized_path(image).c_str(), &width, &height, &nrChannels, 0);
+
+    if(data) {
+        GLFWimage img[1];
+
+        img[0].width = width;
+        img[0].height = height;
+        img[0].pixels = data;
+
+        glfwSetWindowIcon(window, 1, img);
+
+        v::util::log((std::string("Set Window Icon: ") + image).c_str());
+
+        stbi_image_free(data);
+    } else {
+        v::util::log((std::string("Failed to set Window Icon: ") + image).c_str());    
+    }
+}
+
 void v::engine::Window::SwapBuffers() {
     return glfwSwapBuffers(window);
 }

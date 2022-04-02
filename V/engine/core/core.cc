@@ -66,6 +66,8 @@ void v::engine::Core::Run() {
     Window->SetFramebufferSizeCallback(this->window_callback);
     Window->SetKeyCallback(this->key_callback);
 
+    Window->SetIcon("\\V\\icon.png");
+
     gladLoadGL();
 
     glViewport(0, 0, settings.width, settings.height);
