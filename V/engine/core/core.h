@@ -19,9 +19,13 @@ namespace v {
                 // extra shaders in case you want different Models rendered differently
                 std::vector<v::renderer::Shader*> shaders;
 
-                v::renderer::Shader * default_shaderProgram;
+                v::renderer::Shader * shaderProgram;
 
-                static v::renderer::Shader * default_framebufferProgram;
+                v::renderer::Shader * skyboxProgram;
+
+                v::renderer::Skybox * skybox;
+
+                static v::renderer::Shader * framebufferProgram;
                 
                 static v::renderer::Framebuffer * framebuffer;
 

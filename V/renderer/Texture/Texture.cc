@@ -1,8 +1,5 @@
 #include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
 v::renderer::Texture::Texture(const char * image, const char * texType, GLuint slot) {
     type = texType;
     
@@ -12,13 +9,12 @@ v::renderer::Texture::Texture(const char * image, const char * texType, GLuint s
 
     unsigned char * bytes = stbi_load(image, &widthImg, &heightImg, &numColChannel, 0);
 
-    v::util::log("Trying to load texture...\n");
+    v::util::log((std::string("Loading Texture: ") + image).c_str());
 
     // Rework error checking
     if(!bytes) {
-        std::string a = "Faulty Path at texture constr: ";
-        v::util::log((a + std::string(image) + '\n').c_str());
-        throw std::invalid_argument("Wrong File path");
+        v::util::log((std::string("Failed to load Texture: ") + image).c_str());
+        return;
     }
 
     glGenTextures(1, &ID);
@@ -42,8 +38,8 @@ v::renderer::Texture::Texture(const char * image, const char * texType, GLuint s
     } else if(numColChannel == 1) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, GL_RED, GL_UNSIGNED_BYTE, bytes);
     } else {
-        v::util::log("Wrong Color Channel Number at texture constr\n");
-        throw std::invalid_argument("Wrong Color Channel Number.");
+        v::util::log((std::string("Wrong Color Channel Number at Texture: ") + image).c_str());
+        return;
     }
 
     glGenerateMipmap(GL_TEXTURE_2D);

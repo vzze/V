@@ -43,7 +43,19 @@ float v::util::normalized_color(short int color) {
 }
 
 void v::util::log(const char * output) {
-    static std::ofstream out("app.log"); out << output;
+    static std::ofstream out("app.log"); 
+
+    std::chrono::time_point t = std::chrono::system_clock::now();
+
+    std::time_t tt = std::chrono::system_clock::to_time_t(t);
+
+    std::tm tm; localtime_s(&tm, &tt);
+
+    std::stringstream ss;
+
+    ss << std::put_time(&tm, "%H:%M:%S");
+
+    out << '[' << ss.str() << "]: " << output << '\n';
 }
 
 const std::string v::util::default_fragment_shader_path = v::util::normalized_path("\\V\\renderer\\shaders\\default.frag");

@@ -24,7 +24,7 @@ v::engine::Window::Window(v::engine::EngineSettings & settings) {
     }
 
     if(window == NULL) {
-        v::util::log("Failed to create GLFW window\n");
+        v::util::log("Failed to create GLFW Window");
         
         failed = true;
 

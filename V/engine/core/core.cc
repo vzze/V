@@ -23,7 +23,7 @@ v::renderer::Camera * v::engine::Core::camera = nullptr;
 v::engine::EngineSettings v::engine::Core::settings = {};
 
 v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
-v::renderer::Shader * v::engine::Core::default_framebufferProgram = nullptr;
+v::renderer::Shader * v::engine::Core::framebufferProgram = nullptr;
 
 v::engine::Window * v::engine::Core::Window = nullptr;
 
@@ -39,8 +39,8 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     framebuffer = new v::renderer::Framebuffer();
     framebuffer->Bind(width, height);
     
-    default_framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
-    default_framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
+    framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
+    framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
 
     glViewport(0, 0, width, height);
 }
@@ -70,12 +70,20 @@ void v::engine::Core::Run() {
 
     glViewport(0, 0, settings.width, settings.height);
 
-    default_shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
+    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
 
     std::string frag_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.frag");
     std::string vert_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.vert");
 
-    default_framebufferProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
+    framebufferProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
+
+    frag_path.clear();
+    vert_path.clear();
+
+    frag_path = v::util::normalized_path("\\V\\renderer\\shaders\\skybox.frag");
+    vert_path = v::util::normalized_path("\\V\\renderer\\shaders\\skybox.vert");
+
+    skyboxProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -83,17 +91,20 @@ void v::engine::Core::Run() {
 
     lightModel = glm::translate(lightModel, lightPos);
  
-    default_shaderProgram->Activate();
+    shaderProgram->Activate();
 
-    default_shaderProgram->Uniform4f("lightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    default_shaderProgram->Uniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
-    
-    default_framebufferProgram->Activate();
+    shaderProgram->Uniform4f("lightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    shaderProgram->Uniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+   
+    skyboxProgram->Activate();
+    skyboxProgram->Uniform1i("skybox", 0);
 
-    default_framebufferProgram->Uniform1i("screenTexture", 0);
+    framebufferProgram->Activate();
 
-    default_framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(settings.width));
-    default_framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(settings.height));
+    framebufferProgram->Uniform1i("screenTexture", 0);
+
+    framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(settings.width));
+    framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(settings.height));
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -107,6 +118,19 @@ void v::engine::Core::Run() {
     framebuffer = new v::renderer::Framebuffer();
 
     framebuffer->Bind(settings.width, settings.height);
+
+    std::string arr[] = {
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\right.jpg"),
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\left.jpg"),
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\top.jpg"),
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\bottom.jpg"),
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\front.jpg"),
+        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\back.jpg"),
+    };
+
+    skybox = new v::renderer::Skybox();
+
+    skybox->Bind(arr);
 
     if(!settings.VSYNC)
         glfwSwapInterval(0);
@@ -123,16 +147,20 @@ v::engine::Core::~Core() {
         delete shader;
     }
 
-    default_shaderProgram->Delete();
-    default_framebufferProgram->Delete();
+    shaderProgram->Delete();
+    framebufferProgram->Delete();
+    skyboxProgram->Delete();
 
-    delete default_shaderProgram;
-    delete default_framebufferProgram;
+    delete shaderProgram;
+    delete framebufferProgram;
+    delete skyboxProgram;
 
     framebuffer->Delete();
 
     delete framebuffer;
     delete camera;
+
+    delete skybox;
 
     delete Window;
 }
@@ -195,7 +223,9 @@ void v::engine::Core::main_thread() {
         if(!Draw())
             break;
 
-        framebuffer->Draw(*default_framebufferProgram);
+        skybox->Draw(*skyboxProgram, settings, *camera); 
+
+        framebuffer->Draw(*framebufferProgram);
 
         Window->SwapBuffers();
 

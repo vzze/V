@@ -7,6 +7,15 @@ v::renderer::Mesh::Mesh(std::vector<Vertex> & vertices, std::vector<GLuint> & in
 
     vao.Bind();
 
+    v::util::log(
+        (
+            std::string("Loading Mesh: ") + 
+            std::to_string(vertices.size()) + " " + 
+            std::to_string(indices.size()) + " " + 
+            std::to_string(textures.size())
+        ).c_str()
+    );
+
     v::renderer::VBO vbo(vertices);
 
     v::renderer::EBO ebo(indices);

@@ -9,3 +9,4 @@
 #include "./Mesh/Mesh.h"
 #include "./Model/Model.h"
 #include "./Framebuffer/Framebuffer.h"
+#include "./Skybox/Skybox.h"

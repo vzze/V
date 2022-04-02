@@ -6,6 +6,8 @@ v::renderer::Model::Model(const char * file) {
 
     Model::file = file;
 
+    v::util::log((std::string("Loading Model: ") + file).c_str());
+
     data = getData();
 
     TraverseNode(0);
@@ -46,7 +48,7 @@ std::vector<float> v::renderer::Model::getFloats(json accessor) {
 	else if(type == "VEC3") numPerVert = 3;
 	else if(type == "VEC4") numPerVert = 4;
 	else {
-        v::util::log("Invalid type: SCALAR, VEC2, VEC3, VEC4 at model constr\n");
+        v::util::log("Invalid type: SCALAR, VEC2, VEC3, VEC4 at Model Constructor");
         throw std::invalid_argument("Invalid type: SCALAR, VEC2, VEC3, VEC4");
     };
 

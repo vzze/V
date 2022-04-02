@@ -34,7 +34,7 @@ void v::renderer::Framebuffer::Bind(GLuint width, GLuint height) {
     GLenum FBO_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
     if(FBO_status != GL_FRAMEBUFFER_COMPLETE) 
-        v::util::log("Framebuffer failed.\n");
+        v::util::log("Failed to load Framebuffer");
 }
 
 void v::renderer::Framebuffer::Delete() {
