@@ -18,14 +18,25 @@ void v::engine::Core::loadModels(std::vector<std::string> & paths) {
         objects.push_back(new v::engine::Object(v::util::normalized_path(path.c_str()).c_str()));
 }
 
-v::renderer::Camera * v::engine::Core::camera = nullptr;
+void v::engine::Core::loadSkyboxes(Skybox_container & cont) {
+    skyboxes.push_back(new v::renderer::Skybox());
+    skyboxes[skyboxes.size() - 1]->Bind(cont.arr);
+}
 
-v::engine::EngineSettings v::engine::Core::settings = {};
+void v::engine::Core::loadSkyboxes(std::vector<Skybox_container> & conts) {
+    for(auto cont : conts) {
+        skyboxes.push_back(new v::renderer::Skybox());
+        skyboxes[skyboxes.size() - 1]->Bind(cont.arr);
+    }
+}
 
-v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
-v::renderer::Shader * v::engine::Core::framebufferProgram = nullptr;
-
-v::engine::Window * v::engine::Core::Window = nullptr;
+void v::engine::Core::setCurrentSkybox(unsigned int index) {
+    try {
+        current_skybox = skyboxes[index];
+    } catch(...) {
+        current_skybox = nullptr;
+    }
+}
 
 void v::engine::Core::window_callback(GLFWwindow * window, int width, int height) {
     settings.width = width;
@@ -117,22 +128,11 @@ void v::engine::Core::Run() {
 
     loadModels(settings.model_paths);
 
+    loadSkyboxes(settings.skybox_paths);
+
     framebuffer = new v::renderer::Framebuffer();
 
     framebuffer->Bind(settings.width, settings.height);
-
-    std::string arr[] = {
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\right.jpg"),
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\left.jpg"),
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\top.jpg"),
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\bottom.jpg"),
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\front.jpg"),
-        v::util::normalized_path("\\V\\renderer\\Resources\\Models\\skybox\\back.jpg"),
-    };
-
-    skybox = new v::renderer::Skybox();
-
-    skybox->Bind(arr);
 
     if(!settings.VSYNC)
         glfwSwapInterval(0);
@@ -144,10 +144,14 @@ void v::engine::Core::Run() {
 v::engine::Core::~Core() {
     for(auto object : objects)
         delete object;
+    
     for(auto shader : shaders) {
         shader->Delete();
         delete shader;
     }
+
+    for(auto skybox : skyboxes)
+        delete skybox;
 
     shaderProgram->Delete();
     framebufferProgram->Delete();
@@ -161,8 +165,6 @@ v::engine::Core::~Core() {
 
     delete framebuffer;
     delete camera;
-
-    delete skybox;
 
     delete Window;
 }
@@ -225,7 +227,8 @@ void v::engine::Core::main_thread() {
         if(!Draw())
             break;
 
-        skybox->Draw(*skyboxProgram, settings, *camera); 
+        if(current_skybox)
+            current_skybox->Draw(*skyboxProgram, settings, *camera); 
 
         framebuffer->Draw(*framebufferProgram);
 
@@ -234,3 +237,10 @@ void v::engine::Core::main_thread() {
         glfwPollEvents();
     }
 }
+
+// statics
+v::renderer::Camera * v::engine::Core::camera = nullptr;
+v::engine::EngineSettings v::engine::Core::settings = {};
+v::renderer::Framebuffer * v::engine::Core::framebuffer = nullptr;
+v::renderer::Shader * v::engine::Core::framebufferProgram = nullptr;
+v::engine::Window * v::engine::Core::Window = nullptr;

@@ -7,6 +7,9 @@ class App : public v::engine::Core {
 
         bool Init() override {
             objects.at(0)->Scale(1.5F, 1.5F, 1.5F);
+
+            setCurrentSkybox(0);
+
             return true;
         }
 

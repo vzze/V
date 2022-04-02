@@ -12,6 +12,11 @@
 
 namespace v {
     namespace engine {
+        // Order of cubemaps should be:
+        // right left top bottom front back
+        struct Skybox_container {
+            std::string arr[6];
+        };
         // fragment and vertex shader paths should be normalized with
         // v::util::normalized_path
         // @width - window width
@@ -34,7 +39,9 @@ namespace v {
             std::string fragmentShaderPath = v::util::default_fragment_shader_path.c_str(); 
         
             std::vector<std::string> model_paths;
-        
+       
+            std::vector<Skybox_container> skybox_paths;
+
             std::string appName = "V";
 
             double tickrate = 1.0 / 64.0;

@@ -39,7 +39,7 @@ void v::renderer::Skybox::Bind(std::string cubeMaps[6]) {
     for(unsigned int i = 0; i < 6; i++) {
         int width, height, nrChannels;
         
-        unsigned char * data = stbi_load(cubeMaps[i].c_str(), &width, &height, &nrChannels, 0);
+        unsigned char * data = stbi_load(v::util::normalized_path(cubeMaps[i].c_str()).c_str(), &width, &height, &nrChannels, 0);
         
         v::util::log((std::string("Loading Skybox Texture: ") + cubeMaps[i]).c_str());
 

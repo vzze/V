@@ -42,6 +42,18 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
 
+    for(json skybox : obj["skyboxes"]) {
+        Skybox_container ob;
+        ob.arr[0] = skybox["right"];
+        ob.arr[1] = skybox["left"];
+        ob.arr[2] = skybox["top"];
+        ob.arr[3] = skybox["bottom"];
+        ob.arr[4] = skybox["front"];
+        ob.arr[5] = skybox["back"];
+
+        setts.skybox_paths.push_back(ob);
+    }
+
     setts.tickrate = obj["tickrate"];
     setts.fullscreen = obj["fullscreen"];
     setts.VSYNC = obj["VSYNC"];
@@ -87,7 +99,19 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
 
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
+    
+    for(json skybox : obj["skyboxes"]) {
+        Skybox_container ob;
+        ob.arr[0] = skybox["right"];
+        ob.arr[1] = skybox["left"];
+        ob.arr[2] = skybox["top"];
+        ob.arr[3] = skybox["bottom"];
+        ob.arr[4] = skybox["front"];
+        ob.arr[5] = skybox["back"];
 
+        setts.skybox_paths.push_back(ob);
+    }
+    
     setts.tickrate = obj["tickrate"];
     setts.fullscreen = obj["fullscreen"];
     setts.VSYNC = obj["VSYNC"];
