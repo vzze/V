@@ -16,6 +16,8 @@ namespace v {
                 GLFWwindow * share = nullptr;
                 GLFWmonitor * monitor = nullptr;
 
+                bool FOCUSED = true;
+
                 bool failed = false;
 
                 Window(v::engine::EngineSettings & settings);
@@ -26,6 +28,7 @@ namespace v {
 
                 void SetFramebufferSizeCallback(GLFWframebuffersizefun fn);
                 void SetKeyCallback(GLFWkeyfun fn);
+                void SetWindowFocusCallback(GLFWwindowfocusfun fn);
 
                 bool ShouldClose();
 

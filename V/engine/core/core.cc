@@ -63,6 +63,10 @@ void v::engine::Core::key_callback(GLFWwindow * window, int key, int scancode, i
     }
 }
 
+void v::engine::Core::focus_callback(GLFWwindow * window, int focused) {
+    Window->FOCUSED = (bool)(focused);
+}
+
 void v::engine::Core::Run() {
     glfwInit();
 
@@ -76,6 +80,7 @@ void v::engine::Core::Run() {
 
     Window->SetFramebufferSizeCallback(this->window_callback);
     Window->SetKeyCallback(this->key_callback);
+    Window->SetWindowFocusCallback(this->focus_callback);
 
     Window->SetIcon("\\V\\icon.png");
 
@@ -184,55 +189,58 @@ void v::engine::Core::main_thread() {
     double tickrateDiffTime;
 
     while(!Window->ShouldClose()) {
-        currTime = glfwGetTime();
+        if(Window->FOCUSED) {
+            currTime = glfwGetTime();
 
-        diffTime = currTime - prevTime;
+            diffTime = currTime - prevTime;
 
-        camDiffTime = currTime - camPrevTime;
+            camDiffTime = currTime - camPrevTime;
 
-        tickrateDiffTime = currTime - tickratePrevTime;
+            tickrateDiffTime = currTime - tickratePrevTime;
 
-        counter++;
+            counter++;
 
-        if(diffTime >= 1.0 / 30.0) {
-            std::string FPS = std::to_string((1.0 / diffTime) * counter);
-            std::string MS = std::to_string(((diffTime / counter) * 1000.0));
-            std::string Title = settings.appName + " - " + FPS + "FPS | " + MS + " ms";
+            if(diffTime >= 1.0 / 30.0) {
+                std::string FPS = std::to_string((1.0 / diffTime) * counter);
+                std::string MS = std::to_string(((diffTime / counter) * 1000.0));
+                std::string Title = settings.appName + " - " + FPS + "FPS | " + MS + " ms";
 
-            Window->SetTitle(Title.c_str()); 
-            prevTime = currTime;
-            counter = 0;
-        }
+                Window->SetTitle(Title.c_str()); 
+                prevTime = currTime;
+                counter = 0;
+            }
 
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
-        glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        glEnable(GL_DEPTH_TEST);
+            glEnable(GL_DEPTH_TEST);
 
-        if(tickrateDiffTime >= settings.tickrate) {
-            if(!Tickrate(diffTime))
+            if(tickrateDiffTime >= settings.tickrate) {
+                if(!Tickrate(diffTime))
+                    break;
+                tickratePrevTime = currTime;
+            }
+
+            if(camDiffTime >= 1.0 / 1000.0) {
+                camera->Inputs(Window->window);
+                camPrevTime = currTime;
+            }
+
+            camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
+
+            if(!Draw())
                 break;
-            tickratePrevTime = currTime;
+
+            if(current_skybox)
+                current_skybox->Draw(*skyboxProgram, settings, *camera); 
+
+            framebuffer->Draw(*framebufferProgram);
+
+            Window->SwapBuffers();
+
         }
-
-        if(camDiffTime >= 1.0 / 1000.0) {
-            camera->Inputs(Window->window);
-            camPrevTime = currTime;
-        }
-
-        camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
-
-        if(!Draw())
-            break;
-
-        if(current_skybox)
-            current_skybox->Draw(*skyboxProgram, settings, *camera); 
-
-        framebuffer->Draw(*framebufferProgram);
-
-        Window->SwapBuffers();
 
         glfwPollEvents();
     }

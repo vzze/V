@@ -74,6 +74,7 @@ namespace v {
 
                 static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods);
                 static void window_callback(GLFWwindow * window, int width, int heigh);
+                static void focus_callback(GLFWwindow * window, int focused);
         };
     }
 }

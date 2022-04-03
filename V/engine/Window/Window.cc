@@ -61,6 +61,10 @@ void v::engine::Window::SetKeyCallback(GLFWkeyfun fn) {
     glfwSetKeyCallback(window, fn);
 }
 
+void v::engine::Window::SetWindowFocusCallback(GLFWwindowfocusfun fn) {
+    glfwSetWindowFocusCallback(window, fn);
+}
+
 bool v::engine::Window::ShouldClose() {
     return glfwWindowShouldClose(window);
 }
