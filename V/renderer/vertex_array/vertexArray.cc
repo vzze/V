@@ -7,10 +7,10 @@ v::renderer::VAO::VAO() {
 void v::renderer::VAO::LinkAttrib(VBO & vbo, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void * offset) {
     vbo.Bind();
 
-	glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
-	glEnableVertexAttribArray(layout);
+    glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
+    glEnableVertexAttribArray(layout);
 
-	vbo.Unbind();
+    vbo.Unbind();
 }
 
 void v::renderer::VAO::Bind() {

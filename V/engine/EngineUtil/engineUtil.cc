@@ -7,16 +7,19 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
 
     json obj = json::parse(str);
 
-    setts.width = obj["width"];
-    setts.height = obj["height"];
+    setts.width = obj["width"]; v::util::log((std::string("Config: Width = ") + std::to_string(setts.width)).c_str());
+    setts.height = obj["height"]; v::util::log((std::string("Config: Height = ") + std::to_string(setts.height)).c_str());
 
     setts.camera_position = glm::vec3(obj["camera_position"][0], 
                                       obj["camera_position"][1],
                                       obj["camera_position"][2]
-                            );
-    setts.cameraFOVdegrees = obj["cameraFOVdegrees"];
-    setts.cameraNearPlane = obj["cameraNearPlane"];
-    setts.cameraFarPlane = obj["cameraFarPlane"];
+                            ); 
+
+    v::util::log((std::string("Config: Camera Position = ( ") + std::to_string(setts.camera_position.x) + std::to_string(setts.camera_position.y) + std::to_string(setts.camera_position.z) + " )").c_str()); 
+
+    setts.cameraFOVdegrees = obj["cameraFOVdegrees"]; v::util::log((std::string("Config: FOV = ") + std::to_string(setts.cameraFOVdegrees)).c_str());
+    setts.cameraNearPlane = obj["cameraNearPlane"]; v::util::log((std::string("Config: Near Plane = ") + std::to_string(setts.cameraNearPlane)).c_str());
+    setts.cameraFarPlane = obj["cameraFarPlane"]; v::util::log((("Config: Far Plane = ") + std::to_string(setts.cameraFarPlane)).c_str());
 
     if(obj["vertexShaderPath"] == "" || obj["vertexShaderPath"] == "default") {
         setts.vertexShaderPath = const_cast<char*>(v::util::default_vertex_shader_path.c_str());
@@ -25,12 +28,16 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
         setts.vertexShaderPath = const_cast<char*>(vertP.c_str());
     }
 
+    v::util::log((std::string("Config: Vertex Shader = ") + setts.vertexShaderPath).c_str());
+
     if(obj["fragmentShaderPath"] == "" || obj["fragmentShaderPath"] == "default") {
         setts.fragmentShaderPath = const_cast<char*>(v::util::default_fragment_shader_path.c_str());
     } else {
         std::string fragP = obj["fragmentShaderPath"];
         setts.fragmentShaderPath = const_cast<char*>(fragP.c_str());
     }
+
+    v::util::log((std::string("Config: Fragment Shader = ") + setts.fragmentShaderPath).c_str());
 
     if(obj["appName"] == "")
         setts.appName = const_cast<char*>("V");
@@ -39,8 +46,12 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
         setts.appName = const_cast<char*>(n.c_str());
     }
 
+    v::util::log((std::string("Config: Application Name = ") + setts.appName).c_str());
+
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
+
+    v::util::log((std::string("Config: Queued Models for loading = ") + std::to_string(setts.model_paths.size())).c_str());
 
     for(json skybox : obj["skyboxes"]) {
         Skybox_container ob;
@@ -54,9 +65,12 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
         setts.skybox_paths.push_back(ob);
     }
 
-    setts.tickrate = obj["tickrate"];
-    setts.fullscreen = obj["fullscreen"];
-    setts.VSYNC = obj["VSYNC"];
+    v::util::log((std::string("Config: Queued Skyboxes for loading = ") + std::to_string(setts.skybox_paths.size())).c_str());
+
+    setts.tickrate = obj["tickrate"]; v::util::log((std::string("Config: Tickrate = ") + std::to_string(setts.tickrate)).c_str());
+    setts.fullscreen = obj["fullscreen"]; v::util::log((std::string("Config: Fullscreen = ") + std::to_string(setts.fullscreen)).c_str());
+    setts.VSYNC = obj["VSYNC"]; v::util::log((std::string("Config: V-Sync = ") + std::to_string(setts.VSYNC)).c_str());
+
     return setts;
 }
 
@@ -65,16 +79,19 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
 
     json obj = json::parse(str);
 
-    setts.width = obj["width"];
-    setts.height = obj["height"];
+    setts.width = obj["width"]; v::util::log((std::string("Config: Width = ") + std::to_string(setts.width)).c_str());
+    setts.height = obj["height"]; v::util::log((std::string("Config: Height = ") + std::to_string(setts.height)).c_str());
 
     setts.camera_position = glm::vec3(obj["camera_position"][0], 
                                       obj["camera_position"][1],
                                       obj["camera_position"][2]
-                            );
-    setts.cameraFOVdegrees = obj["cameraFOVdegrees"];
-    setts.cameraNearPlane = obj["cameraNearPlane"];
-    setts.cameraFarPlane = obj["cameraFarPlane"];
+                            ); 
+
+    v::util::log((std::string("Config: Camera Position = ( ") + std::to_string(setts.camera_position.x) + std::to_string(setts.camera_position.y) + std::to_string(setts.camera_position.z) + " )").c_str()); 
+
+    setts.cameraFOVdegrees = obj["cameraFOVdegrees"]; v::util::log((std::string("Config: FOV = ") + std::to_string(setts.cameraFOVdegrees)).c_str());
+    setts.cameraNearPlane = obj["cameraNearPlane"]; v::util::log((std::string("Config: Near Plane = ") + std::to_string(setts.cameraNearPlane)).c_str());
+    setts.cameraFarPlane = obj["cameraFarPlane"]; v::util::log((("Config: Far Plane = ") + std::to_string(setts.cameraFarPlane)).c_str());
 
     if(obj["vertexShaderPath"] == "" || obj["vertexShaderPath"] == "default") {
         setts.vertexShaderPath = const_cast<char*>(v::util::default_vertex_shader_path.c_str());
@@ -83,12 +100,16 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
         setts.vertexShaderPath = const_cast<char*>(vertP.c_str());
     }
 
+    v::util::log((std::string("Config: Vertex Shader = ") + setts.vertexShaderPath).c_str());
+
     if(obj["fragmentShaderPath"] == "" || obj["fragmentShaderPath"] == "default") {
         setts.fragmentShaderPath = const_cast<char*>(v::util::default_fragment_shader_path.c_str());
     } else {
         std::string fragP = obj["fragmentShaderPath"];
         setts.fragmentShaderPath = const_cast<char*>(fragP.c_str());
     }
+
+    v::util::log((std::string("Config: Fragment Shader = ") + setts.fragmentShaderPath).c_str());
 
     if(obj["appName"] == "")
         setts.appName = const_cast<char*>("V");
@@ -97,9 +118,13 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
         setts.appName = const_cast<char*>(n.c_str());
     }
 
+    v::util::log((std::string("Config: Application Name = ") + setts.appName).c_str());
+
     for(std::string path : obj["model_paths"])
         setts.model_paths.push_back(path);
-    
+
+    v::util::log((std::string("Config: Queued Models for loading = ") + std::to_string(setts.model_paths.size())).c_str());
+
     for(json skybox : obj["skyboxes"]) {
         Skybox_container ob;
         ob.arr[0] = skybox["right"];
@@ -111,10 +136,12 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
 
         setts.skybox_paths.push_back(ob);
     }
-    
-    setts.tickrate = obj["tickrate"];
-    setts.fullscreen = obj["fullscreen"];
-    setts.VSYNC = obj["VSYNC"];
+
+    v::util::log((std::string("Config: Queued Skyboxes for loading = ") + std::to_string(setts.skybox_paths.size())).c_str());
+
+    setts.tickrate = obj["tickrate"]; v::util::log((std::string("Config: Tickrate = ") + std::to_string(setts.tickrate)).c_str());
+    setts.fullscreen = obj["fullscreen"]; v::util::log((std::string("Config: Fullscreen = ") + std::to_string(setts.fullscreen)).c_str());
+    setts.VSYNC = obj["VSYNC"]; v::util::log((std::string("Config: V-Sync = ") + std::to_string(setts.VSYNC)).c_str());
 }
 
 v::engine::Object::~Object() {}
