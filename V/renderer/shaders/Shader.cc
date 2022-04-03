@@ -2,36 +2,50 @@
 
 #include <iostream>
 
-v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile) {
-    std::string vertF = v::util::get_file(vertexFile);
-    std::string fragF = v::util::get_file(fragmentFile);
-
-    const char * vf = vertF.c_str();
-    const char * ff = fragF.c_str();
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vf, NULL);
-    glCompileShader(vertexShader);
-
-    compileErr(vertexShader, "VERTEX");
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &ff, NULL);
-    glCompileShader(fragmentShader);
-
-    compileErr(fragmentShader, "FRAGMENT");
+v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile, const char * geometryFile) {
+    GLuint vertexShader = compileShader(vertexFile, GL_VERTEX_SHADER);
+    GLuint fragmentShader = compileShader(fragmentFile, GL_FRAGMENT_SHADER);
+    GLuint geometryShader; if(geometryFile) geometryShader = compileShader(geometryFile, GL_GEOMETRY_SHADER);
 
     ID = glCreateProgram();
 
     glAttachShader(ID, vertexShader);
     glAttachShader(ID, fragmentShader);
+    if(geometryFile) glAttachShader(ID, geometryShader);
 
     glLinkProgram(ID);
     
     compileErr(ID, "PROGRAM");
 
     glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader); 
+    glDeleteShader(fragmentShader);
+    if(geometryFile) glDeleteShader(geometryShader);
+}
+
+GLuint v::renderer::Shader::compileShader(const char * file, GLenum type) {
+    std::string source = v::util::get_file(file);
+
+    const char * c_source = source.c_str();
+
+    GLuint Shader = glCreateShader(type);
+    glShaderSource(Shader, 1, &c_source, NULL);
+    glCompileShader(Shader);
+
+    switch(type) {
+        case GL_VERTEX_SHADER:
+            compileErr(Shader, "VERTEX");
+        break;
+
+        case GL_FRAGMENT_SHADER:
+            compileErr(Shader, "FRAGMENT");
+        break;
+
+        case GL_GEOMETRY_SHADER:
+            compileErr(Shader, "GEOMETRY");
+        break;
+    }
+
+    return Shader;
 }
 
 void v::renderer::Shader::Activate() {

@@ -15,12 +15,14 @@ namespace v {
 
                 GLint loc(const char * value);
 
+                GLuint compileShader(const char * file, GLenum type);
+
             public:
 
                 GLuint ID;
 
-                Shader(const char * vertexFile, const char * fragmentFile);
-                
+                Shader(const char * vertexFile, const char * fragmentFile, const char * geometryFile = nullptr);
+
                 void Activate();
                 
                 void Delete();
