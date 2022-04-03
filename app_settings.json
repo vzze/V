@@ -11,18 +11,18 @@
     "fragmentShaderPath": "",
         
     "model_paths": [
-        "\\V\\renderer\\Resources\\Models\\statue\\scene.gltf",
-        "\\V\\renderer\\Resources\\Models\\crow\\scene.gltf"
+        "\\renderer\\Resources\\Models\\statue\\scene.gltf",
+        "\\renderer\\Resources\\Models\\crow\\scene.gltf"
     ],
 
     "skyboxes": [
         {
-            "right": "\\V\\renderer\\Resources\\Models\\skybox\\right.jpg",
-            "left": "\\V\\renderer\\Resources\\Models\\skybox\\left.jpg",
-            "top": "\\V\\renderer\\Resources\\Models\\skybox\\top.jpg",
-            "bottom": "\\V\\renderer\\Resources\\Models\\skybox\\bottom.jpg",
-            "front": "\\V\\renderer\\Resources\\Models\\skybox\\front.jpg",
-            "back": "\\V\\renderer\\Resources\\Models\\skybox\\back.jpg"
+            "right": "\\renderer\\Resources\\Models\\skybox\\right.jpg",
+            "left": "\\renderer\\Resources\\Models\\skybox\\left.jpg",
+            "top": "\\renderer\\Resources\\Models\\skybox\\top.jpg",
+            "bottom": "\\renderer\\Resources\\Models\\skybox\\bottom.jpg",
+            "front": "\\renderer\\Resources\\Models\\skybox\\front.jpg",
+            "back": "\\renderer\\Resources\\Models\\skybox\\back.jpg"
         }
     ],
         

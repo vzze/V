@@ -58,8 +58,8 @@ void v::util::log(const char * output) {
     out << '[' << ss.str() << "]: " << output << '\n';
 }
 
-const std::string v::util::default_fragment_shader_path = v::util::normalized_path("\\V\\renderer\\shaders\\default.frag");
-const std::string v::util::default_vertex_shader_path = v::util::normalized_path("\\V\\renderer\\shaders\\default.vert"); 
+const std::string v::util::default_fragment_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.frag");
+const std::string v::util::default_vertex_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.vert"); 
 
 const glm::vec3 v::util::Xaxis = glm::vec3(1.0F, 0.0F, 0.0F);
 const glm::vec3 v::util::Yaxis = glm::vec3(0.0F, 1.0F, 0.0F);

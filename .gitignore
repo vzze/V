@@ -1,7 +1,6 @@
 main.exe
 app.log
-V/renderer/Resources
-.vscode
+renderer/Resources
 .vim
 compile_commands.json
 .cache

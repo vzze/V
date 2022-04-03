@@ -82,7 +82,7 @@ void v::engine::Core::Run() {
     Window->SetKeyCallback(this->key_callback);
     Window->SetWindowFocusCallback(this->focus_callback);
 
-    Window->SetIcon("\\V\\icon.png");
+    Window->SetIcon("\\icon.png");
 
     gladLoadGL();
 
@@ -90,16 +90,16 @@ void v::engine::Core::Run() {
 
     shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
 
-    std::string frag_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.frag");
-    std::string vert_path = v::util::normalized_path("\\V\\renderer\\shaders\\framebuffer.vert");
+    std::string frag_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.frag");
+    std::string vert_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.vert");
 
     framebufferProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
 
     frag_path.clear();
     vert_path.clear();
 
-    frag_path = v::util::normalized_path("\\V\\renderer\\shaders\\skybox.frag");
-    vert_path = v::util::normalized_path("\\V\\renderer\\shaders\\skybox.vert");
+    frag_path = v::util::normalized_path("\\renderer\\shaders\\skybox.frag");
+    vert_path = v::util::normalized_path("\\renderer\\shaders\\skybox.vert");
 
     skyboxProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
 
