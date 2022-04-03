@@ -189,17 +189,22 @@ void v::engine::Core::main_thread() {
     double tickrateDiffTime;
 
     while(!Window->ShouldClose()) {
+        currTime = glfwGetTime();
+
+        diffTime = currTime - prevTime;
+
+        camDiffTime = currTime - camPrevTime;
+
+        tickrateDiffTime = currTime - tickratePrevTime;
+
+        counter++;
+        if(tickrateDiffTime >= settings.tickrate) {
+            if(!Tickrate(diffTime))
+                break;
+            tickratePrevTime = currTime;
+        }
+
         if(Window->FOCUSED) {
-            currTime = glfwGetTime();
-
-            diffTime = currTime - prevTime;
-
-            camDiffTime = currTime - camPrevTime;
-
-            tickrateDiffTime = currTime - tickratePrevTime;
-
-            counter++;
-
             if(diffTime >= 1.0 / 30.0) {
                 std::string FPS = std::to_string((1.0 / diffTime) * counter);
                 std::string MS = std::to_string(((diffTime / counter) * 1000.0));
@@ -216,12 +221,6 @@ void v::engine::Core::main_thread() {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             glEnable(GL_DEPTH_TEST);
-
-            if(tickrateDiffTime >= settings.tickrate) {
-                if(!Tickrate(diffTime))
-                    break;
-                tickratePrevTime = currTime;
-            }
 
             if(camDiffTime >= 1.0 / 1000.0) {
                 camera->Inputs(Window->window);
