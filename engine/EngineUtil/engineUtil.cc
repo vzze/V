@@ -15,7 +15,7 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
                                       obj["camera_position"][2]
                             ); 
 
-    v::util::log((std::string("Config: Camera Position = ( ") + std::to_string(setts.camera_position.x) + std::to_string(setts.camera_position.y) + std::to_string(setts.camera_position.z) + " )").c_str()); 
+    v::util::log((std::string("Config: Camera Position = ( ") + std::to_string(setts.camera_position.x) + ", " + std::to_string(setts.camera_position.y) + ", " + std::to_string(setts.camera_position.z) + " )").c_str()); 
 
     setts.cameraFOVdegrees = obj["cameraFOVdegrees"]; v::util::log((std::string("Config: FOV = ") + std::to_string(setts.cameraFOVdegrees)).c_str());
     setts.cameraNearPlane = obj["cameraNearPlane"]; v::util::log((std::string("Config: Near Plane = ") + std::to_string(setts.cameraNearPlane)).c_str());
