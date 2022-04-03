@@ -90,18 +90,9 @@ void v::engine::Core::Run() {
 
     shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
 
-    std::string frag_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.frag");
-    std::string vert_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.vert");
+    framebufferProgram = new v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
 
-    framebufferProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
-
-    frag_path.clear();
-    vert_path.clear();
-
-    frag_path = v::util::normalized_path("\\renderer\\shaders\\skybox.frag");
-    vert_path = v::util::normalized_path("\\renderer\\shaders\\skybox.vert");
-
-    skyboxProgram = new v::renderer::Shader(vert_path.c_str(), frag_path.c_str());
+    skyboxProgram = new v::renderer::Shader(v::util::default_skybox_vertex_path.c_str(), v::util::default_skybox_fragment_path.c_str());
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);

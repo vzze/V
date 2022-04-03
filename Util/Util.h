@@ -23,6 +23,12 @@ namespace v {
         extern const std::string default_vertex_shader_path;
         extern const std::string default_fragment_shader_path;
 
+        extern const std::string default_framebuffer_vertex_path;
+        extern const std::string default_framebuffer_fragment_path;
+
+        extern const std::string default_skybox_vertex_path;
+        extern const std::string default_skybox_fragment_path;
+
         std::tuple<short int, short int, short int> hex_to_rgb(long long hex);
 
         std::tuple<float, float, float> normalized_rgb(std::tuple<short int, short int, short int> rgb);

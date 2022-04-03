@@ -61,6 +61,12 @@ void v::util::log(const char * output) {
 const std::string v::util::default_fragment_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.frag");
 const std::string v::util::default_vertex_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.vert"); 
 
+const std::string v::util::default_framebuffer_fragment_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.frag");
+const std::string v::util::default_framebuffer_vertex_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.vert");
+
+const std::string v::util::default_skybox_fragment_path = v::util::normalized_path("\\renderer\\shaders\\skybox.frag");
+const std::string v::util::default_skybox_vertex_path = v::util::normalized_path("\\renderer\\shaders\\skybox.vert");
+
 const glm::vec3 v::util::Xaxis = glm::vec3(1.0F, 0.0F, 0.0F);
 const glm::vec3 v::util::Yaxis = glm::vec3(0.0F, 1.0F, 0.0F);
 const glm::vec3 v::util::Zaxis = glm::vec3(0.0F, 0.0F, 1.0F);
