@@ -10,3 +10,4 @@
 #include "./Model/Model.h"
 #include "./Framebuffer/Framebuffer.h"
 #include "./Skybox/Skybox.h"
+#include "./core/core.h"

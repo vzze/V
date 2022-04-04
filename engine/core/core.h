@@ -21,19 +21,7 @@ namespace v {
                 // extra shaders in case you want different Models rendered differently
                 std::vector<v::renderer::Shader*> shaders;
 
-                v::renderer::Shader * shaderProgram;
-
-                v::renderer::Shader * skyboxProgram;
-                
-                v::renderer::Shader * normalsProgram;
-
-                static v::renderer::Shader * framebufferProgram;
- 
-                static v::renderer::Framebuffer * framebuffer;
-
-                static v::renderer::Camera * camera;
-
-                static v::engine::Window * Window;
+                static v::renderer::Core * renderer; 
 
                 Core(v::engine::EngineSettings & _settings);
                 // default settings are applied
