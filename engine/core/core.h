@@ -24,9 +24,11 @@ namespace v {
                 v::renderer::Shader * shaderProgram;
 
                 v::renderer::Shader * skyboxProgram;
+                
+                v::renderer::Shader * normalsProgram;
 
                 static v::renderer::Shader * framebufferProgram;
-                
+ 
                 static v::renderer::Framebuffer * framebuffer;
 
                 static v::renderer::Camera * camera;

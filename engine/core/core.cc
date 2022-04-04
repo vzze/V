@@ -88,11 +88,13 @@ void v::engine::Core::Run() {
 
     glViewport(0, 0, settings.width, settings.height);
 
-    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str());
+    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), v::util::default_geom_shader_path.c_str());
 
     framebufferProgram = new v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
 
     skyboxProgram = new v::renderer::Shader(v::util::default_skybox_vertex_path.c_str(), v::util::default_skybox_fragment_path.c_str());
+
+    normalsProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), v::util::default_normal_fragment_path.c_str(), v::util::default_normal_geom_path.c_str());
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -119,7 +121,7 @@ void v::engine::Core::Run() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glFrontFace(GL_CCW);
-    
+
     camera = new v::renderer::Camera(settings.width, settings.height, settings.camera_position);
 
     loadModels(settings.model_paths);
@@ -152,10 +154,12 @@ v::engine::Core::~Core() {
     shaderProgram->Delete();
     framebufferProgram->Delete();
     skyboxProgram->Delete();
+    normalsProgram->Delete();
 
     delete shaderProgram;
     delete framebufferProgram;
     delete skyboxProgram;
+    delete normalsProgram;
 
     framebuffer->Delete();
 
