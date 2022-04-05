@@ -45,14 +45,16 @@ namespace v {
                 // path is normalized inside function
                 // \\Path\\to\\Model
                 void loadModels(std::string & path);
+                void loadModels(std::vector<std::string> & paths);
+                
                 // path is normalized inside function
                 // \\Path\\to\\Model
-                void loadModels(std::vector<std::string> & paths);
+                void loadShaders(v::engine::Shader_container & cont);
+                void loadShaders(std::vector<v::engine::Shader_container> & conts);
+
                 // path is normalized inside function
                 // \\Path\\to\\Model
                 void loadSkyboxes(Skybox_container & cont);
-                // path is normalized inside function
-                // \\Path\\to\\Model
                 void loadSkyboxes(std::vector<Skybox_container> & conts);
                 
                 // sets the skybox from the skyboxes vector

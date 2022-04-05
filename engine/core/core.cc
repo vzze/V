@@ -18,6 +18,21 @@ void v::engine::Core::loadModels(std::vector<std::string> & paths) {
         objects.push_back(new v::engine::Object(v::util::normalized_path(path.c_str()).c_str()));
 }
 
+void v::engine::Core::loadShaders(v::engine::Shader_container & cont) {
+    if(cont.arr[2].empty())
+        shaders.push_back(new v::renderer::Shader(cont.arr[0].c_str(), cont.arr[1].c_str(), nullptr));
+    else 
+        shaders.push_back(new v::renderer::Shader(cont.arr[0].c_str(), cont.arr[1].c_str(), cont.arr[2].c_str()));
+}
+
+void v::engine::Core::loadShaders(std::vector<v::engine::Shader_container> & conts) {
+    for(auto cont : conts)
+        if(cont.arr[2].empty())
+            shaders.push_back(new v::renderer::Shader(cont.arr[0].c_str(), cont.arr[1].c_str(), nullptr));
+        else 
+            shaders.push_back(new v::renderer::Shader(cont.arr[0].c_str(), cont.arr[1].c_str(), cont.arr[2].c_str()));
+}
+
 void v::engine::Core::loadSkyboxes(Skybox_container & cont) {
     skyboxes.push_back(new v::renderer::Skybox());
     skyboxes[skyboxes.size() - 1]->Bind(cont.arr);
@@ -73,6 +88,8 @@ void v::engine::Core::Run() {
     loadModels(settings.model_paths);
 
     loadSkyboxes(settings.skybox_paths);
+
+    loadShaders(settings.shader_paths);
     
     if(Init())
         main_thread();

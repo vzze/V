@@ -21,7 +21,7 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
     glViewport(0, 0, settings.width, settings.height);
 
-    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), v::util::default_geom_shader_path.c_str());
+    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), settings.geometryShaderPath.c_str());
 
     framebufferProgram = new v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
 

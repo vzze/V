@@ -57,7 +57,16 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
     }
 
     v::util::log((std::string("Config: Fragment Shader = ") + setts.fragmentShaderPath).c_str());
-
+    
+    if(obj["geometryShaderPath"] == "" || obj["geometryShaderPath"] == "default" || obj["geometryShaderPath"].empty()) {
+        setts.geometryShaderPath = const_cast<char*>(v::util::default_geom_shader_path.c_str());
+    } else {
+        std::string geomP = obj["geometryShaderPath"];
+        setts.geometryShaderPath = const_cast<char*>(geomP.c_str());
+    }
+    
+    v::util::log((std::string("Config: Geometry Shader = ") + setts.geometryShaderPath).c_str());
+    
     if(obj["appName"] == "" || obj["appName"].empty())
         setts.appName = const_cast<char*>("V");
     else {
@@ -172,6 +181,15 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
     }
 
     v::util::log((std::string("Config: Fragment Shader = ") + setts.fragmentShaderPath).c_str());
+    
+    if(obj["geometryShaderPath"] == "" || obj["geometryShaderPath"] == "default" || obj["geometryShaderPath"].empty()) {
+        setts.geometryShaderPath = const_cast<char*>(v::util::default_geom_shader_path.c_str());
+    } else {
+        std::string geomP = obj["geometryShaderPath"];
+        setts.geometryShaderPath = const_cast<char*>(geomP.c_str());
+    }
+    
+    v::util::log((std::string("Config: Geometry Shader = ") + setts.geometryShaderPath).c_str());
 
     if(obj["appName"] == "" || obj["appName"].empty())
         setts.appName = const_cast<char*>("V");
