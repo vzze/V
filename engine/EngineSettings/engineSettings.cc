@@ -229,7 +229,7 @@ void v::engine::read_engineSettings(v::engine::EngineSettings & setts, std::stri
                 sh.arr[2] = shader["geometry"];
             }
 
-    v:util::log((std::string("Config: Shaders loaded = ") + std::to_string(setts.shader_paths.size())).c_str());
+    v:util::log((std::string("Config: Queue Shaders for loading = ") + std::to_string(setts.shader_paths.size())).c_str());
 
     if(!obj["tickrate"].empty())
         setts.tickrate = obj["tickrate"]; 
