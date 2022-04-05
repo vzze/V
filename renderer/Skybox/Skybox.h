@@ -5,7 +5,8 @@
 
 #include "../../Util/Util.h"
 #include "../shaders/Shader.h"
-#include "../../engine/EngineUtil/engineUtil.h"
+#include "../../engine/EngineSettings/engineSettings.h"
+#include "../Camera/Camera.h"
 
 namespace v {
     namespace renderer {

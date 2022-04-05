@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../../engine/EngineUtil/engineUtil.h"
+#include "../../engine/EngineSettings/engineSettings.h"
 #include "../Framebuffer/Framebuffer.h"
 #include "../shaders/Shader.h"
 #include "../../engine/Window/Window.h"
 #include "GLFW/glfw3.h"
+#include "../Camera/Camera.h"
 
 namespace v {
     namespace renderer {

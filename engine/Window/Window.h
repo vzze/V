@@ -6,7 +6,7 @@
 #include <stb_image.h>
 
 #include "../../Util/Util.h"
-#include "../EngineUtil/engineUtil.h"
+#include "../EngineSettings/engineSettings.h"
 
 namespace v {
     namespace engine {
