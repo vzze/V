@@ -20,6 +20,8 @@ namespace v {
             public:
                 v::renderer::Shader * shaderProgram;
 
+                v::renderer::Shader * stencilProgram;
+
                 v::renderer::Shader * skyboxProgram;
                 
                 v::renderer::Shader * normalsProgram;
@@ -35,6 +37,13 @@ namespace v {
                 Core(v::engine::EngineSettings & settings, Callback_Functions funcs);
 
                 ~Core(); 
+
+                void SetNormalLength(float length);
+
+                void SetNormalcolor(float r, float g, float b);
+                void SetNormalcolor(std::tuple<float, float, float> rgb);
+                void SetNormalColor(short int r, short int g, short int b);
+                void SetNormalColor(std::tuple<short int, short int, short int> rgb);
         };
     }
 }

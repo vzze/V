@@ -24,6 +24,9 @@ namespace v {
         extern const std::string default_fragment_shader_path;
         extern const std::string default_geom_shader_path;
 
+        extern const std::string default_stencil_vertex_path;
+        extern const std::string default_stencil_fragment_path;
+
         extern const std::string default_framebuffer_vertex_path;
         extern const std::string default_framebuffer_fragment_path;
 

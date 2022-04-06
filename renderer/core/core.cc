@@ -23,6 +23,8 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
     shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), settings.geometryShaderPath.c_str());
 
+    stencilProgram = new v::renderer::Shader(v::util::default_stencil_vertex_path.c_str(), v::util::default_stencil_fragment_path.c_str());
+
     framebufferProgram = new v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
 
     skyboxProgram = new v::renderer::Shader(v::util::default_skybox_vertex_path.c_str(), v::util::default_skybox_fragment_path.c_str());
@@ -51,6 +53,10 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
     framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(settings.height));
 
     glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glFrontFace(GL_CCW);
@@ -67,11 +73,13 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
 v::renderer::Core::~Core() {
     shaderProgram->Delete();
+    stencilProgram->Delete();
     framebufferProgram->Delete();
     skyboxProgram->Delete();
     normalsProgram->Delete();
 
     delete shaderProgram;
+    delete stencilProgram;
     delete framebufferProgram;
     delete skyboxProgram;
     delete normalsProgram;
@@ -82,4 +90,24 @@ v::renderer::Core::~Core() {
     delete camera;
 
     delete Window;
+}
+
+void v::renderer::Core::SetNormalLength(float length) {
+    normalsProgram->Uniform1f("length", length);
+}
+
+void v::renderer::Core::SetNormalcolor(float r, float g, float b) {
+    normalsProgram->Uniform3f("Color", r, g, b);
+}
+
+void v::renderer::Core::SetNormalcolor(std::tuple<float, float, float> rgb) {
+    normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
+}
+
+void v::renderer::Core::SetNormalColor(short int r, short int g, short int b) {
+    SetNormalColor(v::util::normalized_color(r), v::util::normalized_color(g), v::util::normalized_color(b));
+}
+
+void v::renderer::Core::SetNormalColor(std::tuple<short int, short int, short int> rgb) {
+    SetNormalColor(v::util::normalized_rgb(rgb));
 }

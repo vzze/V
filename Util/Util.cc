@@ -62,6 +62,9 @@ const std::string v::util::default_fragment_shader_path = v::util::normalized_pa
 const std::string v::util::default_vertex_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.vert"); 
 const std::string v::util::default_geom_shader_path = v::util::normalized_path("\\renderer\\shaders\\default.geom");
 
+const std::string v::util::default_stencil_fragment_path = v::util::normalized_path("\\renderer\\shaders\\stencil.frag");
+const std::string v::util::default_stencil_vertex_path = v::util::normalized_path("\\renderer\\shaders\\stencil.vert");
+
 const std::string v::util::default_framebuffer_fragment_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.frag");
 const std::string v::util::default_framebuffer_vertex_path = v::util::normalized_path("\\renderer\\shaders\\framebuffer.vert");
 
