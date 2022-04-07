@@ -18,6 +18,7 @@ v::renderer::Model::Model(const char * file, unsigned int instancing, std::vecto
 }
 
 void v::renderer::Model::draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
+    shader.Activate();
     for(unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader, cam, matricesMeshes[i], translation, rotation, scale);
 }

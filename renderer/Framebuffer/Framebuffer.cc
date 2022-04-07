@@ -57,6 +57,12 @@ void v::renderer::Framebuffer::Bind(GLuint width, GLuint height, unsigned int sa
 
 void v::renderer::Framebuffer::Delete() {
     glDeleteFramebuffers(1, &FBO);
+    glDeleteFramebuffers(1, &postProcessingFBO);
+    glDeleteTextures(1, &postProcessingTexture);
+    glDeleteTextures(1, &framebufferTexture);
+    glDeleteVertexArrays(1, &rectVAO);
+    glDeleteBuffers(1, &rectVBO);
+    glDeleteRenderbuffers(1, &RBO);
 }
 
 void v::renderer::Framebuffer::Draw(v::renderer::Shader & framebufferProgram, int width, int height) {

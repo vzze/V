@@ -62,7 +62,6 @@ void v::renderer::Mesh::Draw(
     glm::quat rotation,
     glm::vec3 scale
 ) {
-    shader.Activate();
     vao.Bind();
 
     unsigned int numDiffuse = 0;
