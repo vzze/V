@@ -25,7 +25,7 @@ void main()
 {
     if(ifinstanced == 0)
         gl_Position = model * translation * rotation * scale * vec4(aPos, 1.0F);
-    else
+    else if(ifinstanced == 1)
         gl_Position = instanceMatrix * vec4(aPos, 1.0F);
 
     data_out.Normal = aNormal;
