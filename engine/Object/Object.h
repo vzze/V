@@ -18,7 +18,7 @@ namespace v {
                 glm::quat rotation = glm::quat(1.0F, 0.0F, 0.0F, 0.0F);
                 glm::vec3 scale = glm::vec3(1.0F, 1.0F, 1.0F);
                 
-                Object(const char * model_path) : v::renderer::Model(model_path) {}
+                Object(const char * model_path, unsigned int instances = 1, std::vector<glm::mat4> instanceMatrix = {}) : v::renderer::Model(model_path, instances, instanceMatrix) {}
                 
                 virtual ~Object();
 

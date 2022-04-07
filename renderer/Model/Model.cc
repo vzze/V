@@ -1,10 +1,14 @@
 #include "Model.h"
 
-v::renderer::Model::Model(const char * file) {
+v::renderer::Model::Model(const char * file, unsigned int instancing, std::vector<glm::mat4> instanceMatrix) {
     std::string txt = v::util::get_file(file);
     JSON = json::parse(txt);
 
     Model::file = file;
+
+    instances = instancing;
+
+    Model::instanceMatrix = instanceMatrix;
 
     v::util::log((std::string("Loading Model: ") + file).c_str());
 
@@ -194,7 +198,7 @@ void v::renderer::Model::loadMesh(unsigned int indMesh) {
 	std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
 	std::vector<Texture> textures = getTextures();
 
-	meshes.push_back(Mesh(vertices, indices, textures));
+	meshes.push_back(Mesh(vertices, indices, textures, instances, instanceMatrix));
 }
 
 void v::renderer::Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix) {

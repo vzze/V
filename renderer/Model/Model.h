@@ -16,6 +16,10 @@ namespace v {
                 json JSON;
 
                 std::vector<v::renderer::Mesh> meshes;
+
+                unsigned int instances;
+
+                std::vector<glm::mat4> instanceMatrix;
                 
                 std::vector<glm::vec3> translationsMeshes;
                 std::vector<glm::quat> rotationsMeshes;
@@ -42,7 +46,7 @@ namespace v {
                 std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
 
             protected:
-                Model(const char * file);
+                Model(const char * file, unsigned int instancing = 1, std::vector<glm::mat4> instanceMatrix = {});
 
                 void draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
         };
