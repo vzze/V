@@ -49,6 +49,8 @@ namespace v {
                 Model(const char * file, unsigned int instancing = 1, std::vector<glm::mat4> instanceMatrix = {});
 
                 void draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
+
+                virtual ~Model();
         };
     }
 }

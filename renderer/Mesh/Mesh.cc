@@ -6,7 +6,7 @@ v::renderer::Mesh::Mesh(
     std::vector<Texture> & textures, 
     unsigned int instancing,
     std::vector<glm::mat4> instanceMatrix 
-) {
+) : instanceVBO(instanceMatrix), vbo(vertices), ebo(indices) {
 
     Mesh::vertices = vertices;
     Mesh::indices = indices;
@@ -26,10 +26,9 @@ v::renderer::Mesh::Mesh(
         ).c_str()
     );
 
-    v::renderer::VBO instanceVBO(instanceMatrix);
-    v::renderer::VBO vbo(vertices);
-
-    v::renderer::EBO ebo(indices);
+    instanceVBO = VBO(instanceMatrix);
+    vbo = VBO(vertices);
+    ebo = EBO(indices);
 
     vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (void *)0);
     vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (void *)(3 * sizeof(float)));
@@ -53,6 +52,16 @@ v::renderer::Mesh::Mesh(
     vbo.Unbind();
     instanceVBO.Unbind();
     ebo.Unbind();
+}
+
+void v::renderer::Mesh::Delete() {
+    vao.Delete();
+    vbo.Delete();
+    instanceVBO.Delete();
+    ebo.Delete();
+
+    for(auto tex : textures)
+        tex.Delete();
 }
 
 void v::renderer::Mesh::Draw(

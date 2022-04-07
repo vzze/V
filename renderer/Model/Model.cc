@@ -17,6 +17,11 @@ v::renderer::Model::Model(const char * file, unsigned int instancing, std::vecto
     TraverseNode(0);
 }
 
+v::renderer::Model::~Model() {
+    for(auto mesh : meshes)
+        mesh.Delete();
+}
+
 void v::renderer::Model::draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
     shader.Activate();
     for(unsigned int i = 0; i < meshes.size(); i++)

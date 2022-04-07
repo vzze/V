@@ -11,7 +11,6 @@ v::renderer::Texture::Texture(const char * image, const char * texType, GLuint s
 
     v::util::log((std::string("Loading Texture: ") + image).c_str());
 
-    // Rework error checking
     if(!bytes) {
         v::util::log((std::string("Failed to load Texture: ") + image).c_str());
         return;

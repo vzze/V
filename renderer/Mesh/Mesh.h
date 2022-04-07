@@ -17,6 +17,9 @@ namespace v {
                 std::vector<Texture> textures;
 
                 VAO vao;
+                VBO instanceVBO;
+                VBO vbo;
+                EBO ebo;
 
                 unsigned int instances;
 
@@ -35,6 +38,8 @@ namespace v {
                     glm::quat rotation = glm::quat(1.0F, 0.0F, 0.0F, 0.0F),
                     glm::vec3 scale = glm::vec3(1.0F, 1.0F, 1.0F)
                 );
+
+                void Delete();
         };
     }
 }
