@@ -9,7 +9,9 @@ class App : public v::engine::Core {
 
             objects.at(0)->Scale(1.5F, 1.5F, 1.5F);
 
-            setCurrentSkybox(0);
+//            setCurrentSkybox(0);
+
+            SetBackgroundColor(0xFCC0FF);
 
             renderer->MSAA(v::renderer::MSAA_8X);
 

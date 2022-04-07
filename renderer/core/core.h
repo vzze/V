@@ -51,6 +51,7 @@ namespace v {
 
                 void SetNormalLength(float length);
 
+                void SetNormalColor(long long hex);
                 void SetNormalcolor(float r, float g, float b);
                 void SetNormalcolor(std::tuple<float, float, float> rgb);
                 void SetNormalColor(short int r, short int g, short int b);

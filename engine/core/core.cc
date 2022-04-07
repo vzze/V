@@ -153,7 +153,7 @@ void v::engine::Core::main_thread() {
 
             glBindFramebuffer(GL_FRAMEBUFFER, renderer->framebuffer->FBO);
 
-            glClearColor(0.10F, 0.10F, 0.10F, 1.0F);
+            glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), 1.0F);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             glEnable(GL_DEPTH_TEST);
@@ -178,6 +178,25 @@ void v::engine::Core::main_thread() {
 
         glfwPollEvents();
     }
+}
+
+void v::engine::Core::SetBackgroundColor(long long hex) {
+    auto l = v::util::hex_to_rgb(hex);
+    backgroundColor = v::util::normalized_rgb(l);
+}
+
+void v::engine::Core::SetBackgroundColor(float r, float g, float b) {
+    backgroundColor = std::tuple<float, float, float>(r, g, b);
+}
+void v::engine::Core::SetBackgroundColor(std::tuple<float, float, float> rgb) {
+    backgroundColor = rgb;
+}
+void v::engine::Core::SetBackgroundColor(short int r, short int g, short int b) {
+    backgroundColor = v::util::normalized_rgb(std::tuple<short, short, short>(r, g, b));
+} 
+
+void v::engine::Core::SetBackgroundColor(std::tuple<short int, short int, short int> rgb) {
+    backgroundColor = v::util::normalized_rgb(rgb);
 }
 
 v::renderer::Core * v::engine::Core::renderer = nullptr;

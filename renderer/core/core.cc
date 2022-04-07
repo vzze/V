@@ -116,6 +116,12 @@ void v::renderer::Core::SetNormalLength(float length) {
     normalsProgram->Uniform1f("length", length);
 }
 
+void v::renderer::Core::SetNormalColor(long long hex) {
+    auto l = v::util::hex_to_rgb(hex);
+    auto rgb = v::util::normalized_rgb(l);
+    normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
+}
+
 void v::renderer::Core::SetNormalcolor(float r, float g, float b) {
     normalsProgram->Uniform3f("Color", r, g, b);
 }

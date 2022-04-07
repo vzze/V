@@ -60,8 +60,15 @@ namespace v {
                 // sets the skybox from the skyboxes vector
                 void setCurrentSkybox(unsigned int index);
 
+                void SetBackgroundColor(long long hex);
+                void SetBackgroundColor(float r, float g, float b);
+                void SetBackgroundColor(std::tuple<float, float, float> rgb);
+                void SetBackgroundColor(short int r, short int g, short int b);
+                void SetBackgroundColor(std::tuple<short int, short int, short int> rgb);
             private:
                 v::renderer::Skybox * current_skybox = nullptr;
+
+                std::tuple<float, float, float> backgroundColor = { 0.0F, 0.0F, 0.0F };
 
                 void main_thread();
 
