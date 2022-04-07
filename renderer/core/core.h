@@ -46,6 +46,7 @@ namespace v {
                 ~Core(); 
 
                 unsigned int MSAAsamples = 1;
+                float gamma = 2.2F;
 
                 void MSAA(unsigned int opt);
 
@@ -56,6 +57,8 @@ namespace v {
                 void SetNormalcolor(std::tuple<float, float, float> rgb);
                 void SetNormalColor(short int r, short int g, short int b);
                 void SetNormalColor(std::tuple<short int, short int, short int> rgb);
+
+                void SetGammaCorrection(float value = 2.2F);
         };
     }
 }

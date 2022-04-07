@@ -187,16 +187,32 @@ void v::engine::Core::SetBackgroundColor(long long hex) {
 
 void v::engine::Core::SetBackgroundColor(float r, float g, float b) {
     backgroundColor = std::tuple<float, float, float>(r, g, b);
+
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
 }
 void v::engine::Core::SetBackgroundColor(std::tuple<float, float, float> rgb) {
     backgroundColor = rgb;
+
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
 }
 void v::engine::Core::SetBackgroundColor(short int r, short int g, short int b) {
     backgroundColor = v::util::normalized_rgb(std::tuple<short, short, short>(r, g, b));
+
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
 } 
 
 void v::engine::Core::SetBackgroundColor(std::tuple<short int, short int, short int> rgb) {
     backgroundColor = v::util::normalized_rgb(rgb);
+
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
 }
 
 v::renderer::Core * v::engine::Core::renderer = nullptr;

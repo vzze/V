@@ -8,6 +8,8 @@ uniform sampler2D screenTexture;
 uniform float offset_x;
 uniform float offset_y;
 
+uniform float gamma = 2.2F;
+
 vec2 offsets[9] = vec2[]
 (
     vec2(-offset_x,  offset_y), vec2(0.0f,    offset_y), vec2(offset_x,  offset_y),
@@ -30,5 +32,6 @@ void main() {
     
     //FragColor = vec4(color, 1.0F);
 
-    FragColor = texture(screenTexture, texCoords);
+    vec4 fragment = texture(screenTexture, texCoords);
+    FragColor.rgb = pow(fragment.rgb, vec3(1.0f / gamma));
 }

@@ -6,7 +6,14 @@ void v::engine::Object::Draw(v::renderer::Shader &shader, v::renderer::Camera &c
     draw(shader, cam, translation, rotation, scale);    
 }
 
-void v::engine::Object::DrawWithOutline(v::renderer::Shader &shader, v::renderer::Shader &stencil, v::renderer::Camera &cam, float thickness) {
+void v::engine::Object::DrawWithOutline(
+    v::renderer::Shader & shader, 
+    v::renderer::Shader & stencil, 
+    v::renderer::Camera & cam, 
+    float thickness, 
+    std::tuple<float, float, float> rgb, 
+    float alpha 
+) {
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
     glStencilMask(0xFF);
     
@@ -17,6 +24,7 @@ void v::engine::Object::DrawWithOutline(v::renderer::Shader &shader, v::renderer
     glDisable(GL_DEPTH_TEST);
 
     stencil.Uniform1f("outlining", thickness);
+    stencil.Uniform4f("outline_color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb), alpha);
 
     draw(stencil, cam, translation, rotation, scale);
 

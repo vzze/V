@@ -119,14 +119,26 @@ void v::renderer::Core::SetNormalLength(float length) {
 void v::renderer::Core::SetNormalColor(long long hex) {
     auto l = v::util::hex_to_rgb(hex);
     auto rgb = v::util::normalized_rgb(l);
+
+    std::get<0>(rgb) = powf(std::get<0>(rgb), gamma);
+    std::get<1>(rgb) = powf(std::get<1>(rgb), gamma);
+    std::get<2>(rgb) = powf(std::get<2>(rgb), gamma);
+
     normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
 }
 
 void v::renderer::Core::SetNormalcolor(float r, float g, float b) {
+    r = powf(r, gamma);
+    g = powf(g, gamma);
+    b = powf(b, gamma);
     normalsProgram->Uniform3f("Color", r, g, b);
 }
 
 void v::renderer::Core::SetNormalcolor(std::tuple<float, float, float> rgb) {
+    std::get<0>(rgb) = powf(std::get<0>(rgb), gamma);
+    std::get<1>(rgb) = powf(std::get<1>(rgb), gamma);
+    std::get<2>(rgb) = powf(std::get<2>(rgb), gamma);
+
     normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
 }
 
@@ -136,4 +148,9 @@ void v::renderer::Core::SetNormalColor(short int r, short int g, short int b) {
 
 void v::renderer::Core::SetNormalColor(std::tuple<short int, short int, short int> rgb) {
     SetNormalColor(v::util::normalized_rgb(rgb));
+}
+
+void v::renderer::Core::SetGammaCorrection(float value) {
+    framebufferProgram->Uniform1f("gamma", value);
+    gamma = value;
 }

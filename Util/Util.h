@@ -43,6 +43,10 @@ namespace v {
         // color - 0 - 255
         float normalized_color(short int color);
 
+        float gamma_corrected_color(float norm_c, float gamma);
+
+        std::tuple<float, float, float> gamma_corrected_rgb(std::tuple<float, float, float> norm_rgb, float gamma);
+
         std::string get_file(const char * file);
         // Format: \\Path\\to\\file
         std::string normalized_path(const char * path);

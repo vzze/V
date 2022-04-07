@@ -2,6 +2,8 @@
 
 out vec4 FragColor;
 
+uniform vec4 outline_color = vec4(0.0F, 0.0F, 0.0F, 1.0F);
+
 void main() {
-    FragColor = vec4(1.0F, 1.0F, 1.0F, 1.0F);
+    FragColor = outline_color;
 }
