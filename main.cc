@@ -6,9 +6,12 @@ class App : public v::engine::Core {
         App() : v::engine::Core() {};
 
         bool Init() override {
+
             objects.at(0)->Scale(1.5F, 1.5F, 1.5F);
 
             setCurrentSkybox(0);
+
+            renderer->MSAA(v::renderer::MSAA_8X);
 
             return true;
         }
@@ -16,9 +19,9 @@ class App : public v::engine::Core {
         bool Tickrate(double difftime) override {
 
             for(auto object : objects) {
-                object->Rotate(1.0F / 4.0F, v::util::Yaxis);
-                object->Rotate(1.0F / 4.0F, v::util::Xaxis);
-                object->Rotate(1.0F / 4.0F, v::util::Zaxis);
+                /* object->Rotate(1.0F / 4.0F, v::util::Yaxis); */
+                /* object->Rotate(1.0F / 4.0F, v::util::Xaxis); */
+                /* object->Rotate(1.0F / 4.0F, v::util::Zaxis); */
             }
 
             return true;
@@ -26,7 +29,7 @@ class App : public v::engine::Core {
 
         bool Draw() override {
             for(auto object : objects) {
-                object->DrawWithOutline(*renderer->shaderProgram, *renderer->stencilProgram, *renderer->camera);
+                object->Draw(*renderer->shaderProgram, *renderer->camera);
             }
 
             return true;

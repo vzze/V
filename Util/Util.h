@@ -6,6 +6,7 @@
 
 #include <filesystem>
 #include <string>
+#include <unordered_map>
 #include <fstream>
 #include <sstream>
 #include <tuple>

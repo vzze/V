@@ -10,6 +10,13 @@
 namespace v {
     namespace renderer {
 
+        enum {
+            MSAA_DISABLE = 1,
+            MSAA_2X = 2,
+            MSAA_4X = 4,
+            MSAA_8X = 8
+        };
+
         struct Callback_Functions {
             GLFWframebuffersizefun size_callback; 
             GLFWkeyfun key_callback;
@@ -37,6 +44,10 @@ namespace v {
                 Core(v::engine::EngineSettings & settings, Callback_Functions funcs);
 
                 ~Core(); 
+
+                unsigned int MSAAsamples = 1;
+
+                void MSAA(unsigned int opt);
 
                 void SetNormalLength(float length);
 

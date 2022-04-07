@@ -63,7 +63,7 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     renderer->framebuffer->Delete();
     delete renderer->framebuffer;
     renderer->framebuffer = new v::renderer::Framebuffer();
-    renderer->framebuffer->Bind(width, height);
+    renderer->framebuffer->Bind(width, height, renderer->MSAAsamples);
     
     renderer->framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
     renderer->framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
@@ -170,11 +170,10 @@ void v::engine::Core::main_thread() {
 
             if(!Draw())
                 break;
-
-            renderer->framebuffer->Draw(*renderer->framebufferProgram);
-
+            
+            renderer->framebuffer->Draw(*renderer->framebufferProgram, settings.width, settings.height);
+ 
             renderer->Window->SwapBuffers();
-
         }
 
         glfwPollEvents();

@@ -1,4 +1,5 @@
 #include "core.h"
+#include "GLFW/glfw3.h"
 
 v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions funcs) {
     glfwInit();
@@ -54,6 +55,8 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
     glEnable(GL_DEPTH_TEST);
 
+    glEnable(GL_MULTISAMPLE);
+
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
@@ -64,7 +67,7 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
     camera = new v::renderer::Camera(settings.width, settings.height, settings.camera_position);
 
     framebuffer = new v::renderer::Framebuffer();
-
+    
     framebuffer->Bind(settings.width, settings.height);
 
     if(!settings.VSYNC)
@@ -90,6 +93,23 @@ v::renderer::Core::~Core() {
     delete camera;
 
     delete Window;
+}
+
+void v::renderer::Core::MSAA(unsigned int opt) {
+    MSAAsamples = opt;
+
+    if(framebuffer) {
+        framebuffer->Delete();
+        delete framebuffer;
+    }
+
+    int width, height;
+
+    glfwGetWindowSize(Window->window, &width, &height);
+
+    framebuffer = new v::renderer::Framebuffer();
+
+    framebuffer->Bind(width, height, MSAAsamples);
 }
 
 void v::renderer::Core::SetNormalLength(float length) {

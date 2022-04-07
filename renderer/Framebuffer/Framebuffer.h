@@ -25,6 +25,9 @@ namespace v {
                 GLuint FBO;
                 GLuint RBO; 
                 
+                GLuint postProcessingFBO;
+                GLuint postProcessingTexture;
+
                 GLuint framebufferTexture;
 
                 GLuint rectVAO;
@@ -32,9 +35,9 @@ namespace v {
 
                 Framebuffer();
 
-                void Bind(GLuint width, GLuint height);
+                void Bind(GLuint width, GLuint height, unsigned int samples = 8);
                 void Delete();
-                void Draw(v::renderer::Shader & framebufferProgram);
+                void Draw(v::renderer::Shader & framebufferProgram, int width, int height);
         };
     }
 }
