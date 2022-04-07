@@ -6,6 +6,25 @@ void v::engine::Object::Draw(v::renderer::Shader &shader, v::renderer::Camera &c
     draw(shader, cam, translation, rotation, scale);    
 }
 
+void v::engine::Object::DrawWithOutline(v::renderer::Shader &shader, v::renderer::Shader &stencil, v::renderer::Camera &cam, float thickness) {
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilMask(0xFF);
+    
+    draw(shader, cam, translation, rotation, scale);
+
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00);
+    glDisable(GL_DEPTH_TEST);
+
+    stencil.Uniform1f("outlining", thickness);
+
+    draw(stencil, cam, translation, rotation, scale);
+
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 0, 0xFF);
+    glEnable(GL_DEPTH_TEST);
+}
+
 void v::engine::Object::Rotate(float degrees, const glm::vec3 & axis) { 
     rotation = glm::normalize(rotation * glm::angleAxis(glm::radians(degrees), axis));
 }

@@ -33,14 +33,17 @@ GLuint v::renderer::Shader::compileShader(const char * file, GLenum type) {
 
     switch(type) {
         case GL_VERTEX_SHADER:
+            v::util::log((std::string("Shader: Loading Vertex Shader: ") + file).c_str());
             compileErr(Shader, "VERTEX");
         break;
 
         case GL_FRAGMENT_SHADER:
+            v::util::log((std::string("Shader: Loading Fragment Shader: ") + file).c_str());
             compileErr(Shader, "FRAGMENT");
         break;
 
         case GL_GEOMETRY_SHADER:
+            v::util::log((std::string("Shader: Loading Geometry Shader: ") + file).c_str());
             compileErr(Shader, "GEOMETRY");
         break;
     }

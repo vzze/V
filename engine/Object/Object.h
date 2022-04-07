@@ -23,6 +23,8 @@ namespace v {
                 virtual ~Object();
 
                 void Draw(v::renderer::Shader & shader, v::renderer::Camera & cam);
+
+                void DrawWithOutline(v::renderer::Shader & shader, v::renderer::Shader & stencil, v::renderer::Camera & cam, float thickness = 0.08F);
                 // degrees are automatically converted into radians
                 // X, Y and Z axis can be found in v::util
                 void Rotate(float degrees, const glm::vec3 & axis);

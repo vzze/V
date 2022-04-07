@@ -26,8 +26,7 @@ class App : public v::engine::Core {
 
         bool Draw() override {
             for(auto object : objects) {
-                object->Draw(*renderer->shaderProgram, *renderer->camera);
-                object->Draw(*renderer->normalsProgram, *renderer->camera);
+                object->DrawWithOutline(*renderer->shaderProgram, *renderer->stencilProgram, *renderer->camera);
             }
 
             return true;

@@ -165,11 +165,11 @@ void v::engine::Core::main_thread() {
 
             renderer->camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
-            if(!Draw())
-                break;
-
             if(current_skybox)
                 current_skybox->Draw(*renderer->skyboxProgram, settings, *renderer->camera); 
+
+            if(!Draw())
+                break;
 
             renderer->framebuffer->Draw(*renderer->framebufferProgram);
 
