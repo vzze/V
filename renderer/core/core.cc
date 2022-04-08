@@ -95,8 +95,8 @@ v::renderer::Core::~Core() {
     delete Window;
 }
 
-void v::renderer::Core::MSAA(unsigned int opt) {
-    MSAAsamples = opt;
+void v::renderer::Core::MSAA(v::MSAA msaa) {
+    MSAAsamples = (unsigned)msaa;
 
     if(framebuffer) {
         framebuffer->Delete();

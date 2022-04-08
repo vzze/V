@@ -14,6 +14,19 @@
 #include <iomanip>
 
 namespace v {
+
+    enum class MODE {
+        VDEBUG,
+        VRELEASE
+    };
+
+    enum class MSAA {
+        VDISABLE = 1,
+        V2X = 2,
+        V4X = 4,
+        V8X = 8
+    };
+
     namespace util {
         void log(const char * output);
         

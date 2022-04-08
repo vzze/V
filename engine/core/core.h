@@ -65,12 +65,17 @@ namespace v {
                 void SetBackgroundColor(std::tuple<float, float, float> rgb);
                 void SetBackgroundColor(short int r, short int g, short int b);
                 void SetBackgroundColor(std::tuple<short int, short int, short int> rgb);
+
+                void SetMode(MODE mode);
             private:
                 v::renderer::Skybox * current_skybox = nullptr;
 
                 std::tuple<float, float, float> backgroundColor = { 0.0F, 0.0F, 0.0F };
 
-                void main_thread();
+                MODE mode = v::MODE::VRELEASE;
+
+                void release_thread();
+                void debug_thread();
 
                 static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods);
                 static void window_callback(GLFWwindow * window, int width, int heigh);

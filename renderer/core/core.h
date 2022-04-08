@@ -10,13 +10,6 @@
 namespace v {
     namespace renderer {
 
-        enum {
-            MSAA_DISABLE = 1,
-            MSAA_2X = 2,
-            MSAA_4X = 4,
-            MSAA_8X = 8
-        };
-
         struct Callback_Functions {
             GLFWframebuffersizefun size_callback; 
             GLFWkeyfun key_callback;
@@ -48,7 +41,7 @@ namespace v {
                 unsigned int MSAAsamples = 1;
                 float gamma = 2.2F;
 
-                void MSAA(unsigned int opt);
+                void MSAA(MSAA msaa);
 
                 void SetNormalLength(float length);
 
@@ -57,7 +50,8 @@ namespace v {
                 void SetNormalcolor(std::tuple<float, float, float> rgb);
                 void SetNormalColor(short int r, short int g, short int b);
                 void SetNormalColor(std::tuple<short int, short int, short int> rgb);
-
+                
+                // domain of 0.45F to 2.5F
                 void SetGammaCorrection(float value = 2.2F);
         };
     }

@@ -82,6 +82,10 @@ void v::engine::Core::focus_callback(GLFWwindow * window, int focused) {
     renderer->Window->FOCUSED = (bool)(focused);
 }
 
+void v::engine::Core::SetMode(v::MODE mode) {
+    v::engine::Core::mode = mode;
+}
+
 void v::engine::Core::Run() {
     renderer = new v::renderer::Core(settings, { this->window_callback, this->key_callback, this->focus_callback});
 
@@ -91,8 +95,17 @@ void v::engine::Core::Run() {
 
     loadShaders(settings.shader_paths);
     
-    if(Init())
-        main_thread();
+    if(!Init())
+        return;
+
+    switch(mode) {
+        case v::MODE::VRELEASE:
+            release_thread();
+        break;
+        case v::MODE::VDEBUG:
+            debug_thread();
+        break;
+    }
 }
 
 v::engine::Core::~Core() {
@@ -110,7 +123,60 @@ v::engine::Core::~Core() {
     delete renderer;
 }
 
-void v::engine::Core::main_thread() {
+void v::engine::Core::release_thread() {
+    double currTime;
+
+    double camPrevTime = 0.0;
+    double camDiffTime;
+
+    double tickratePrevTime = 0.0;
+    double tickrateDiffTime;
+
+    while(!renderer->Window->ShouldClose()) {
+        currTime = glfwGetTime();
+
+        camDiffTime = currTime - camPrevTime;
+
+        tickrateDiffTime = currTime - tickratePrevTime;
+
+        if(tickrateDiffTime >= settings.tickrate) {
+            if(!Tickrate(tickrateDiffTime))
+                break;
+            tickratePrevTime = currTime;
+        }
+
+        if(renderer->Window->FOCUSED) {
+
+            glBindFramebuffer(GL_FRAMEBUFFER, renderer->framebuffer->FBO);
+
+            glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), 1.0F);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+            glEnable(GL_DEPTH_TEST);
+
+            if(camDiffTime >= 1.0 / 1000.0) {
+                renderer->camera->Inputs(renderer->Window->window);
+                camPrevTime = currTime;
+            }
+
+            renderer->camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
+
+            if(current_skybox)
+                current_skybox->Draw(*renderer->skyboxProgram, settings, *renderer->camera); 
+
+            if(!Draw())
+                break;
+            
+            renderer->framebuffer->Draw(*renderer->framebufferProgram, settings.width, settings.height);
+ 
+            renderer->Window->SwapBuffers();
+        }
+
+        glfwPollEvents();
+    }
+}
+
+void v::engine::Core::debug_thread() {
     double currTime;
 
     double prevTime = 0.0;
@@ -135,7 +201,7 @@ void v::engine::Core::main_thread() {
 
         counter++;
         if(tickrateDiffTime >= settings.tickrate) {
-            if(!Tickrate(diffTime))
+            if(!Tickrate(tickrateDiffTime))
                 break;
             tickratePrevTime = currTime;
         }

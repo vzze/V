@@ -13,9 +13,11 @@ class App : public v::engine::Core {
 
             SetBackgroundColor(0xFCC0FF);
 
-            renderer->MSAA(v::renderer::MSAA_8X);
+            renderer->MSAA(v::MSAA::V8X);
 
             renderer->SetGammaCorrection(2.2F);
+
+            SetMode(v::MODE::VRELEASE);
 
             return true;
         }
