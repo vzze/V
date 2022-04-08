@@ -17,22 +17,18 @@ class App : public v::engine::Core {
 
             renderer->MSAA(v::MSAA::V8X);
 
-            SetMode(v::MODE::VRELEASE);
+            SetMode(v::MODE::VDEBUG);
 
             return true;
         }
 
         bool Tickrate(double difftime) override {
-            for(auto object : objects) {
-                object->Rotate(1.0F / 4.0F, v::util::Yaxis);
-            }
+            DebugTickrate();
             return true;
         }
 
         bool Draw() override {
-            for(auto object : objects) {
-                object->Draw(*renderer->shaderProgram, *renderer->camera);
-            }
+            DebugDraw();
             return true;
         }
 };

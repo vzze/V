@@ -42,11 +42,11 @@ float v::util::normalized_color(short int color) {
     return 1.0F / 255.0F * (float)(color);
 }
 
-float gamma_corrected_color(float norm_c, float gamma) {
+float v::util::gamma_corrected_color(float norm_c, float gamma) {
     return powf(norm_c, gamma);
 }
 
-std::tuple<float, float, float> gamma_corrected_rgb(std::tuple<float, float, float> norm_rgb, float gamma) {
+std::tuple<float, float, float> v::util::gamma_corrected_rgb(std::tuple<float, float, float> norm_rgb, float gamma) {
     std::tuple<float, float, float> ret;
 
     std::get<0>(ret) = powf(std::get<0>(norm_rgb), gamma);

@@ -27,10 +27,10 @@ namespace v {
                 void DrawWithOutline(
                     v::renderer::Shader & shader, 
                     v::renderer::Shader & stencil, 
-                    v::renderer::Camera & cam, 
-                    float thickness = 0.08F, 
-                    std::tuple<float, float, float> rgb = { 0.0F, 0.0F, 0.0F }, 
-                    float alpha = 1.0F
+                    v::renderer::Camera & cam,
+                    std::tuple<float, float, float> rgb = { 0.0F, 0.0F, 0.0F },
+                    float alpha = 1.0F,
+                    float thickness = 0.08
                 );
                 // degrees are automatically converted into radians
                 // X, Y and Z axis can be found in v::util

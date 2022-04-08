@@ -3,6 +3,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include "../../renderer/renderer.h"
 #include "../../Util/Util.h"
 #include "../Window/Window.h"
@@ -67,6 +71,10 @@ namespace v {
                 void SetBackgroundColor(std::tuple<short int, short int, short int> rgb);
 
                 void SetMode(MODE mode);
+
+                void DebugDraw();
+                void DebugTickrate();
+
             private:
                 v::renderer::Skybox * current_skybox = nullptr;
 
@@ -75,8 +83,57 @@ namespace v {
                 MODE mode = v::MODE::VRELEASE;
 
                 void release_thread();
+                // ------------- debug mode 
                 void debug_thread();
 
+                ImGuiIO & Init(GLFWwindow * window, const char * version);
+
+                void Prep();
+
+                void MainWindow();
+                void GammaWindow();
+
+                bool skybox_draw = false;
+                int skybox_slider;
+
+                void SkyboxWindow();
+
+                float color[3] = { 0.0F, 0.0F, 0.0F };
+
+                void BackgroundColorWindow();
+
+                struct ObjectProps {
+                    bool draw = true;
+                    bool DrawOutline = false;
+                    bool DrawNormals = false;
+
+                    float colors[3] = { 1.0F, 1.0F, 1.0F };
+                    float thickness = 0.08;
+                    float alpha = 1.0F;
+                    
+                    float X_rot = 0.0F;
+                    float Y_rot = 0.0F;
+                    float Z_rot = 0.0F;
+
+                    float X_scale = 1.0F;
+                    float Y_scale = 1.0F;
+                    float Z_scale = 1.0F;
+
+                    float X_translate = 0.0F;
+                    float Y_translate = 0.0F;
+                    float Z_translate = 0.0F;
+                };
+
+                ObjectProps * props;
+
+                int object_slider = 1;
+
+                void ObjectWindow();
+
+                void Render();
+
+                void Terminate();
+                // ----------------
                 static void key_callback(GLFWwindow * window, int key, int scancode, int action, int mods);
                 static void window_callback(GLFWwindow * window, int width, int heigh);
                 static void focus_callback(GLFWwindow * window, int focused);

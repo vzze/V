@@ -24,6 +24,14 @@
             "bottom": "\\renderer\\Resources\\Models\\skybox\\bottom.jpg",
             "front": "\\renderer\\Resources\\Models\\skybox\\front.jpg",
             "back": "\\renderer\\Resources\\Models\\skybox\\back.jpg"
+        },
+        {
+            "right": "\\renderer\\Resources\\Models\\skybox\\singular.jpg",
+            "left": "\\renderer\\Resources\\Models\\skybox\\singular.jpg",
+            "top": "\\renderer\\Resources\\Models\\skybox\\singular.jpg",
+            "bottom": "\\renderer\\Resources\\Models\\skybox\\singular.jpg",
+            "front": "\\renderer\\Resources\\Models\\skybox\\singular.jpg",
+            "back": "\\renderer\\Resources\\Models\\skybox\\singular.jpg"
         }
     ],
         

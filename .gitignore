@@ -4,5 +4,4 @@ renderer/Resources
 .vim
 compile_commands.json
 .cache
-build.bat
-todo
+imgui.ini
