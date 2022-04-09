@@ -4,7 +4,7 @@ $depfiles = "./dependencies/glad/src/glad.c ./dependencies/imgui/imgui.cpp ./dep
 
 $enginefiles = "./renderer/core/core.cc ./renderer/stb.cc ./renderer/Skybox/Skybox.cc ./engine/Window/Window.cc ./renderer/Framebuffer/Framebuffer.cc ./renderer/shaders/Shader.cc ./renderer/vertex_buffer/vertexBuffer.cc ./renderer/EBO/EBO.cc ./renderer/vertex_array/vertexArray.cc ./renderer/Texture/Texture.cc ./renderer/Camera/Camera.cc ./renderer/Mesh/Mesh.cc ./renderer/Model/Model.cc ./engine/core/core.cc ./engine/EngineSettings/engineSettings.cc ./engine/Object/Object.cc ./Util/Util.cc"
 
-$flags = "-std=c++17 -lpthread -lglfw3 -lopengl32 -lgdi32 -O2"
+$flags = "--verbose -std=c++17 -lpthread -lglfw3 -lopengl32 -lgdi32 -O2"
 
 $arguments = ""
 
@@ -14,4 +14,4 @@ for ($i = 0; $i -lt $args.Count; $i++) {
 
 $command = $deps + " " + $depfiles + " " + $enginefiles + " " + $flags + " " + $arguments
 
-Start-Process g++ $command
+Start-Process g++ $command -Wait
