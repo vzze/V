@@ -2,7 +2,10 @@
 #include "GLFW/glfw3.h"
 
 v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions funcs) {
-    glfwInit();
+    if(glfwInit() == GLFW_FALSE) {
+        v::util::log("RENDERER: GLFW Failed");
+        return;
+    }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
