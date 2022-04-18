@@ -122,7 +122,6 @@ v::engine::EngineSettings v::engine::read_engineSettings(std::string path) {
 
     v::util::log((std::string("Config: V-Sync = ") + std::to_string(setts.VSYNC)).c_str());
 
-
     return setts;
 }
 
