@@ -67,8 +67,8 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     framebuffer = new v::renderer::Framebuffer();
     framebuffer->Bind(width, height, MSAAsamples);
     
-    framebufferProgram.Uniform1f("offset_x", 1.0F / (float)(width));
-    framebufferProgram.Uniform1f("offset_y", 1.0F / (float)(height));
+    framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
+    framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
 
     glViewport(0, 0, width, height);
 }
@@ -164,12 +164,12 @@ void v::engine::Core::release_thread() {
             camera.updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
             if(current_skybox)
-                current_skybox->Draw(skyboxProgram, settings, camera); 
+                current_skybox->Draw(*skyboxProgram, settings, camera); 
 
             if(!Draw())
                 break;
             
-            framebuffer->Draw(framebufferProgram, settings.width, settings.height);
+            framebuffer->Draw(*framebufferProgram, settings.width, settings.height);
  
             Window->SwapBuffers();
         }
@@ -251,12 +251,12 @@ void v::engine::Core::debug_thread() {
             camera.updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
             if(current_skybox)
-                current_skybox->Draw(skyboxProgram, settings, camera); 
+                current_skybox->Draw(*skyboxProgram, settings, camera); 
 
             if(!Draw())
                 break;
             
-            framebuffer->Draw(framebufferProgram, settings.width, settings.height);
+            framebuffer->Draw(*framebufferProgram, settings.width, settings.height);
 
             Render();
  
@@ -373,12 +373,12 @@ void v::engine::Core::DebugDraw() {
             if(props[i].DrawOutline) {
                 std::tuple<float, float, float> rgb = { props[i].colors[0], props[i].colors[1], props[i].colors[2] };
                 rgb = v::util::gamma_corrected_rgb(rgb, gamma);
-                objects[i]->DrawWithOutline(shaderProgram, stencilProgram, camera, rgb, props[i].alpha, props[i].thickness); 
+                objects[i]->DrawWithOutline(*shaderProgram, *stencilProgram, camera, rgb, props[i].alpha, props[i].thickness); 
             } else
-                objects[i]->Draw(shaderProgram, camera);
+                objects[i]->Draw(*shaderProgram, camera);
 
             if(props[i].DrawNormals)
-                objects[i]->Draw(normalsProgram, camera);    
+                objects[i]->Draw(*normalsProgram, camera);    
         } 
     }
 }

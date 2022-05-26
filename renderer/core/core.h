@@ -18,15 +18,15 @@ namespace v {
 
         class Core {
             public:
-                v::renderer::Shader shaderProgram;
+                v::renderer::Shader * shaderProgram;
 
-                v::renderer::Shader stencilProgram;
+                v::renderer::Shader * stencilProgram;
 
-                v::renderer::Shader skyboxProgram;
+                v::renderer::Shader * skyboxProgram;
                 
-                v::renderer::Shader normalsProgram;
+                v::renderer::Shader * normalsProgram;
 
-                static v::renderer::Shader framebufferProgram;
+                static v::renderer::Shader * framebufferProgram;
  
                 static v::renderer::Framebuffer * framebuffer;
 
