@@ -27,15 +27,15 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
     glViewport(0, 0, settings.width, settings.height);
 
-    shaderProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), settings.geometryShaderPath.c_str());
+    shaderProgram = v::renderer::Shader(settings.vertexShaderPath.c_str(), settings.fragmentShaderPath.c_str(), settings.geometryShaderPath.c_str());
 
-    stencilProgram = new v::renderer::Shader(v::util::default_stencil_vertex_path.c_str(), v::util::default_stencil_fragment_path.c_str());
+    stencilProgram = v::renderer::Shader(v::util::default_stencil_vertex_path.c_str(), v::util::default_stencil_fragment_path.c_str());
 
-    framebufferProgram = new v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
+    framebufferProgram = v::renderer::Shader(v::util::default_framebuffer_vertex_path.c_str(), v::util::default_framebuffer_fragment_path.c_str());
 
-    skyboxProgram = new v::renderer::Shader(v::util::default_skybox_vertex_path.c_str(), v::util::default_skybox_fragment_path.c_str());
+    skyboxProgram = v::renderer::Shader(v::util::default_skybox_vertex_path.c_str(), v::util::default_skybox_fragment_path.c_str());
 
-    normalsProgram = new v::renderer::Shader(settings.vertexShaderPath.c_str(), v::util::default_normal_fragment_path.c_str(), v::util::default_normal_geom_path.c_str());
+    normalsProgram = v::renderer::Shader(settings.vertexShaderPath.c_str(), v::util::default_normal_fragment_path.c_str(), v::util::default_normal_geom_path.c_str());
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -43,20 +43,20 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 
     lightModel = glm::translate(lightModel, lightPos);
  
-    shaderProgram->Activate();
+    shaderProgram.Activate();
 
-    shaderProgram->Uniform4f("lightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    shaderProgram->Uniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+    shaderProgram.Uniform4f("lightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    shaderProgram.Uniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
    
-    skyboxProgram->Activate();
-    skyboxProgram->Uniform1i("skybox", 0);
+    skyboxProgram.Activate();
+    skyboxProgram.Uniform1i("skybox", 0);
 
-    framebufferProgram->Activate();
+    framebufferProgram.Activate();
 
-    framebufferProgram->Uniform1i("screenTexture", 0);
+    framebufferProgram.Uniform1i("screenTexture", 0);
 
-    framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(settings.width));
-    framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(settings.height));
+    framebufferProgram.Uniform1f("offset_x", 1.0F / (float)(settings.width));
+    framebufferProgram.Uniform1f("offset_y", 1.0F / (float)(settings.height));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -80,17 +80,11 @@ v::renderer::Core::Core(v::engine::EngineSettings & settings, Callback_Functions
 }
 
 v::renderer::Core::~Core() {
-    shaderProgram->Delete();
-    stencilProgram->Delete();
-    framebufferProgram->Delete();
-    skyboxProgram->Delete();
-    normalsProgram->Delete();
-
-    delete shaderProgram;
-    delete stencilProgram;
-    delete framebufferProgram;
-    delete skyboxProgram;
-    delete normalsProgram;
+    shaderProgram.Delete();
+    stencilProgram.Delete();
+    framebufferProgram.Delete();
+    skyboxProgram.Delete();
+    normalsProgram.Delete();
 
     framebuffer->Delete();
 
@@ -118,7 +112,7 @@ void v::renderer::Core::MSAA(v::MSAA msaa) {
 }
 
 void v::renderer::Core::SetNormalLength(float length) {
-    normalsProgram->Uniform1f("length", length);
+    normalsProgram.Uniform1f("length", length);
 }
 
 void v::renderer::Core::SetNormalColor(long long hex) {
@@ -129,14 +123,14 @@ void v::renderer::Core::SetNormalColor(long long hex) {
     std::get<1>(rgb) = powf(std::get<1>(rgb), gamma);
     std::get<2>(rgb) = powf(std::get<2>(rgb), gamma);
 
-    normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
+    normalsProgram.Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
 }
 
 void v::renderer::Core::SetNormalcolor(float r, float g, float b) {
     r = powf(r, gamma);
     g = powf(g, gamma);
     b = powf(b, gamma);
-    normalsProgram->Uniform3f("Color", r, g, b);
+    normalsProgram.Uniform3f("Color", r, g, b);
 }
 
 void v::renderer::Core::SetNormalcolor(std::tuple<float, float, float> rgb) {
@@ -144,7 +138,7 @@ void v::renderer::Core::SetNormalcolor(std::tuple<float, float, float> rgb) {
     std::get<1>(rgb) = powf(std::get<1>(rgb), gamma);
     std::get<2>(rgb) = powf(std::get<2>(rgb), gamma);
 
-    normalsProgram->Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
+    normalsProgram.Uniform3f("Color", std::get<0>(rgb), std::get<1>(rgb), std::get<2>(rgb));
 }
 
 void v::renderer::Core::SetNormalColor(short int r, short int g, short int b) {
@@ -156,12 +150,12 @@ void v::renderer::Core::SetNormalColor(std::tuple<short int, short int, short in
 }
 
 void v::renderer::Core::SetGammaCorrection(float value) {
-    framebufferProgram->Uniform1f("gamma", value);
+    framebufferProgram.Uniform1f("gamma", value);
     gamma = value;
 }
 
 v::renderer::Framebuffer * v::renderer::Core::framebuffer = nullptr;
 v::renderer::Camera v::renderer::Core::camera = v::renderer::Camera();
 unsigned int v::renderer::Core::MSAAsamples = 1;
-v::renderer::Shader * v::renderer::Core::framebufferProgram = nullptr;
+v::renderer::Shader v::renderer::Core::framebufferProgram = v::renderer::Shader();
 v::engine::Window * v::renderer::Core::Window = nullptr;
