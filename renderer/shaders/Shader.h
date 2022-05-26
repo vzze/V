@@ -21,6 +21,8 @@ namespace v {
 
                 GLuint ID;
 
+                Shader() = default;
+
                 Shader(const char * vertexFile, const char * fragmentFile, const char * geometryFile = nullptr);
 
                 void Activate();

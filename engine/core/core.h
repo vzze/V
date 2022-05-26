@@ -15,7 +15,7 @@
 
 namespace v {
     namespace engine {
-        class Core {
+        class Core : public renderer::Core {
             public:
                 // changing settings while app is running might cause problems
                 static v::engine::EngineSettings settings;
@@ -26,7 +26,7 @@ namespace v {
                 // extra shaders in case you want different Models rendered differently
                 std::vector<v::renderer::Shader*> shaders;
 
-                static v::renderer::Core * renderer; 
+                 
 
                 Core(v::engine::EngineSettings & _settings);
                 // default settings are applied

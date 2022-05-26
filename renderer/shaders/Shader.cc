@@ -1,7 +1,5 @@
 #include "Shader.h"
 
-#include <iostream>
-
 v::renderer::Shader::Shader(const char * vertexFile, const char * fragmentFile, const char * geometryFile) {
     GLuint vertexShader = compileShader(vertexFile, GL_VERTEX_SHADER);
     GLuint fragmentShader = compileShader(fragmentFile, GL_FRAGMENT_SHADER);

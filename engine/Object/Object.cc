@@ -1,6 +1,8 @@
 #include "Object.h"
 
-v::engine::Object::~Object() {}
+v::engine::Object::~Object() {
+    v::util::log("Called Engine Object Destructor");
+}
 
 void v::engine::Object::Draw(v::renderer::Shader &shader, v::renderer::Camera &cam) {
     draw(shader, cam, translation, rotation, scale);    

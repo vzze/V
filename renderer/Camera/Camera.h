@@ -31,6 +31,7 @@ namespace v {
                 float speed = 0.1F;
                 float sensitivity = 100.0F;
 
+                Camera() = default;
                 Camera(int width, int height, glm::vec3 position);
                 
                 virtual ~Camera();

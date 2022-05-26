@@ -20,6 +20,7 @@ v::renderer::Model::Model(const char * file, unsigned int instancing, std::vecto
 v::renderer::Model::~Model() {
     for(auto mesh : meshes)
         mesh.Delete();
+    v::util::log("Called Model Destructor");
 }
 
 void v::renderer::Model::draw(Shader & shader, Camera & cam, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {

@@ -21,7 +21,6 @@ namespace v {
                 bool failed = false;
 
                 Window(v::engine::EngineSettings & settings);
-                Window();
 
                 bool isFullscreen();
                 void SetFullscreen(bool fullscreen);

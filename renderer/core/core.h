@@ -16,29 +16,29 @@ namespace v {
             GLFWwindowfocusfun focus_callback;  
         };
 
-        class Core final {
+        class Core {
             public:
-                v::renderer::Shader * shaderProgram;
+                v::renderer::Shader shaderProgram;
 
-                v::renderer::Shader * stencilProgram;
+                v::renderer::Shader stencilProgram;
 
-                v::renderer::Shader * skyboxProgram;
+                v::renderer::Shader skyboxProgram;
                 
-                v::renderer::Shader * normalsProgram;
+                v::renderer::Shader normalsProgram;
 
-                v::renderer::Shader * framebufferProgram;
+                static v::renderer::Shader framebufferProgram;
  
-                v::renderer::Framebuffer * framebuffer;
+                static v::renderer::Framebuffer * framebuffer;
 
-                v::renderer::Camera * camera;
+                static v::renderer::Camera camera;
 
-                v::engine::Window * Window;
+                static v::engine::Window * Window;
 
                 Core(v::engine::EngineSettings & settings, Callback_Functions funcs);
 
-                ~Core(); 
+                virtual ~Core(); 
 
-                unsigned int MSAAsamples = 1;
+                static unsigned int MSAAsamples;
                 float gamma = 2.2F;
 
                 void MSAA(MSAA msaa);

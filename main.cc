@@ -7,7 +7,7 @@ class App : public v::engine::Core {
 
         bool Init() override {
 
-            renderer->SetGammaCorrection(2.2F);
+            SetGammaCorrection(2.2F);
 
             objects.at(0)->Scale(1.5F, 1.5F, 1.5F);
 
@@ -15,7 +15,7 @@ class App : public v::engine::Core {
 
             SetBackgroundColor(0xFCC0FF);
 
-            renderer->MSAA(v::MSAA::V8X);
+            MSAA(v::MSAA::V8X);
 
             SetMode(v::MODE::VRELEASE);
 
@@ -31,7 +31,7 @@ class App : public v::engine::Core {
 
         bool Draw() override {
             for(auto object : objects) {
-                object->Draw(*renderer->shaderProgram, *renderer->camera);
+                object->Draw(shaderProgram, camera);
             }
             return true;
         }

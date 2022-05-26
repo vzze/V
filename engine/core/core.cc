@@ -2,11 +2,11 @@
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 
-v::engine::Core::Core(v::engine::EngineSettings & _settings) {
+v::engine::Core::Core(v::engine::EngineSettings & _settings) : v::renderer::Core(_settings, { this->window_callback, this->key_callback, this->focus_callback}) {
     settings = _settings;
 }
 
-v::engine::Core::Core() {
+v::engine::Core::Core() : v::renderer::Core(settings, { this->window_callback, this->key_callback, this->focus_callback}) {
     v::engine::EngineSettings setts;
     settings = setts;
 }
@@ -59,29 +59,29 @@ void v::engine::Core::window_callback(GLFWwindow * window, int width, int height
     settings.width = width;
     settings.height = height;
 
-    renderer->camera->width = width;
-    renderer->camera->height = height;
+    camera.width = width;
+    camera.height = height;
 
-    renderer->framebuffer->Delete();
-    delete renderer->framebuffer;
-    renderer->framebuffer = new v::renderer::Framebuffer();
-    renderer->framebuffer->Bind(width, height, renderer->MSAAsamples);
+    framebuffer->Delete();
+    delete framebuffer;
+    framebuffer = new v::renderer::Framebuffer();
+    framebuffer->Bind(width, height, MSAAsamples);
     
-    renderer->framebufferProgram->Uniform1f("offset_x", 1.0F / (float)(width));
-    renderer->framebufferProgram->Uniform1f("offset_y", 1.0F / (float)(height));
+    framebufferProgram.Uniform1f("offset_x", 1.0F / (float)(width));
+    framebufferProgram.Uniform1f("offset_y", 1.0F / (float)(height));
 
     glViewport(0, 0, width, height);
 }
 
 void v::engine::Core::key_callback(GLFWwindow * window, int key, int scancode, int action, int mods) {
     if(key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-        renderer->Window->SetFullscreen(!renderer->Window->isFullscreen());
-        settings.fullscreen = renderer->Window->isFullscreen();
+        Window->SetFullscreen(!Window->isFullscreen());
+        settings.fullscreen = Window->isFullscreen();
     }
 }
 
 void v::engine::Core::focus_callback(GLFWwindow * window, int focused) {
-    renderer->Window->FOCUSED = (bool)(focused);
+    Window->FOCUSED = (bool)(focused);
 }
 
 void v::engine::Core::SetMode(v::MODE mode) {
@@ -89,8 +89,6 @@ void v::engine::Core::SetMode(v::MODE mode) {
 }
 
 void v::engine::Core::Run() {
-    renderer = new v::renderer::Core(settings, { this->window_callback, this->key_callback, this->focus_callback});
-
     loadModels(settings.model_paths);
 
     loadSkyboxes(settings.skybox_paths);
@@ -122,22 +120,22 @@ v::engine::Core::~Core() {
     for(auto skybox : skyboxes)
         delete skybox;
 
-    delete renderer;
-
     if(mode == v::MODE::VDEBUG)
         delete props;
+
+    v::util::log("Called Engine Core Destructor");
 }
 
 void v::engine::Core::release_thread() {
     double currTime;
-
+    
     double camPrevTime = 0.0;
     double camDiffTime;
 
     double tickratePrevTime = 0.0;
     double tickrateDiffTime;
 
-    while(!renderer->Window->ShouldClose()) {
+    while(!Window->ShouldClose()) {
         currTime = glfwGetTime();
 
         camDiffTime = currTime - camPrevTime;
@@ -150,9 +148,8 @@ void v::engine::Core::release_thread() {
             tickratePrevTime = currTime;
         }
 
-        if(renderer->Window->FOCUSED) {
-
-            glBindFramebuffer(GL_FRAMEBUFFER, renderer->framebuffer->FBO);
+        if(Window->FOCUSED) {
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
             glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), 1.0F);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -160,21 +157,21 @@ void v::engine::Core::release_thread() {
             glEnable(GL_DEPTH_TEST);
 
             if(camDiffTime >= 1.0 / 1000.0) {
-                renderer->camera->Inputs(renderer->Window->window);
+                camera.Inputs(Window->window);
                 camPrevTime = currTime;
             }
 
-            renderer->camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
+            camera.updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
             if(current_skybox)
-                current_skybox->Draw(*renderer->skyboxProgram, settings, *renderer->camera); 
+                current_skybox->Draw(skyboxProgram, settings, camera); 
 
             if(!Draw())
                 break;
             
-            renderer->framebuffer->Draw(*renderer->framebufferProgram, settings.width, settings.height);
+            framebuffer->Draw(framebufferProgram, settings.width, settings.height);
  
-            renderer->Window->SwapBuffers();
+            Window->SwapBuffers();
         }
 
         glfwPollEvents();
@@ -195,7 +192,7 @@ void v::engine::Core::debug_thread() {
     double tickratePrevTime = 0.0;
     double tickrateDiffTime;
 
-    ImGuiIO & io = Init(renderer->Window->window, "#version 330");
+    ImGuiIO & io = Init(Window->window, "#version 330");
 
     color[0] = std::get<0>(backgroundColor);
     color[1] = std::get<1>(backgroundColor);
@@ -203,7 +200,7 @@ void v::engine::Core::debug_thread() {
 
     props = new ObjectProps[objects.size()];
 
-    while(!renderer->Window->ShouldClose()) {
+    while(!Window->ShouldClose()) {
         currTime = glfwGetTime();
 
         diffTime = currTime - prevTime;
@@ -219,7 +216,7 @@ void v::engine::Core::debug_thread() {
             tickratePrevTime = currTime;
         }
 
-        if(renderer->Window->FOCUSED) {
+        if(Window->FOCUSED) {
             Prep();
 
             MainWindow();
@@ -233,12 +230,12 @@ void v::engine::Core::debug_thread() {
                 std::string MS = std::to_string(((diffTime / counter) * 1000.0));
                 std::string Title = settings.appName + " - " + FPS + "FPS | " + MS + " ms";
 
-                renderer->Window->SetTitle(Title.c_str()); 
+                Window->SetTitle(Title.c_str()); 
                 prevTime = currTime;
                 counter = 0;
             }
 
-            glBindFramebuffer(GL_FRAMEBUFFER, renderer->framebuffer->FBO);
+            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
             glClearColor(std::get<0>(backgroundColor), std::get<1>(backgroundColor), std::get<2>(backgroundColor), 1.0F);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -247,23 +244,23 @@ void v::engine::Core::debug_thread() {
 
             if(camDiffTime >= 1.0 / 1000.0) {
                 if(!io.WantCaptureMouse && !io.WantCaptureKeyboard)
-                    renderer->camera->Inputs(renderer->Window->window);
+                    camera.Inputs(Window->window);
                 camPrevTime = currTime;
             }
 
-            renderer->camera->updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
+            camera.updateMatrix(settings.cameraFOVdegrees, settings.cameraNearPlane, settings.cameraFarPlane);
 
             if(current_skybox)
-                current_skybox->Draw(*renderer->skyboxProgram, settings, *renderer->camera); 
+                current_skybox->Draw(skyboxProgram, settings, camera); 
 
             if(!Draw())
                 break;
             
-            renderer->framebuffer->Draw(*renderer->framebufferProgram, settings.width, settings.height);
+            framebuffer->Draw(framebufferProgram, settings.width, settings.height);
 
             Render();
  
-            renderer->Window->SwapBuffers();
+            Window->SwapBuffers();
         }
 
         glfwPollEvents();
@@ -299,10 +296,10 @@ void v::engine::Core::MainWindow() {
 
 void v::engine::Core::GammaWindow() {
     ImGui::Begin("Gamma");
-    ImGui::SliderFloat("Gamma", &renderer->gamma, 0.45F, 2.5F);
+    ImGui::SliderFloat("Gamma", &gamma, 0.45F, 2.5F);
     ImGui::End();
 
-    renderer->SetGammaCorrection(renderer->gamma);
+    SetGammaCorrection(gamma);
 }
 
 void v::engine::Core::SkyboxWindow() {
@@ -375,13 +372,13 @@ void v::engine::Core::DebugDraw() {
         if(props[i].draw) {
             if(props[i].DrawOutline) {
                 std::tuple<float, float, float> rgb = { props[i].colors[0], props[i].colors[1], props[i].colors[2] };
-                rgb = v::util::gamma_corrected_rgb(rgb, renderer->gamma);
-                objects[i]->DrawWithOutline(*renderer->shaderProgram, *renderer->stencilProgram, *renderer->camera, rgb, props[i].alpha, props[i].thickness); 
+                rgb = v::util::gamma_corrected_rgb(rgb, gamma);
+                objects[i]->DrawWithOutline(shaderProgram, stencilProgram, camera, rgb, props[i].alpha, props[i].thickness); 
             } else
-                objects[i]->Draw(*renderer->shaderProgram, *renderer->camera);
+                objects[i]->Draw(shaderProgram, camera);
 
             if(props[i].DrawNormals)
-                objects[i]->Draw(*renderer->normalsProgram, *renderer->camera);    
+                objects[i]->Draw(normalsProgram, camera);    
         } 
     }
 }
@@ -405,32 +402,31 @@ void v::engine::Core::SetBackgroundColor(long long hex) {
 void v::engine::Core::SetBackgroundColor(float r, float g, float b) {
     backgroundColor = std::tuple<float, float, float>(r, g, b);
 
-    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
-    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
-    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), gamma);
 }
 void v::engine::Core::SetBackgroundColor(std::tuple<float, float, float> rgb) {
     backgroundColor = rgb;
 
-    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
-    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
-    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), gamma);
 }
 void v::engine::Core::SetBackgroundColor(short int r, short int g, short int b) {
     backgroundColor = v::util::normalized_rgb(std::tuple<short, short, short>(r, g, b));
 
-    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
-    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
-    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), gamma);
 } 
 
 void v::engine::Core::SetBackgroundColor(std::tuple<short int, short int, short int> rgb) {
     backgroundColor = v::util::normalized_rgb(rgb);
 
-    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), renderer->gamma);
-    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), renderer->gamma);
-    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), renderer->gamma);
+    std::get<0>(backgroundColor) = powf(std::get<0>(backgroundColor), gamma);
+    std::get<1>(backgroundColor) = powf(std::get<1>(backgroundColor), gamma);
+    std::get<2>(backgroundColor) = powf(std::get<2>(backgroundColor), gamma);
 }
 
-v::renderer::Core * v::engine::Core::renderer = nullptr;
-v::engine::EngineSettings v::engine::Core::settings = {};
+v::engine::EngineSettings v::engine::Core::settings = {}; 
